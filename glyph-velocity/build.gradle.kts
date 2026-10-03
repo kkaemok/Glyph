@@ -11,8 +11,8 @@ velocityPluginJson {
     id = "glyph"
     name = "Glyph"
     authors = listOf("Glyph contributors", "toxicity188 (BetterHud)")
-    description = "Make a hud in minecraft!"
-    url = "https://hangar.papermc.io/toxicity188/Glyph"
+    description = "A high-performance HUD engine for Paper and Velocity, based on BetterHud."
+    url = "https://github.com/toxicity188/BetterHud"
 }
 
 dependencies {
@@ -30,6 +30,9 @@ tasks {
         finalizedBy(shadowJar)
     }
     shadowJar {
+        filesMatching(listOf("META-INF/*.kotlin_module", "META-INF/services/**")) {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
         configurations = listOf(shade)
         archiveBaseName = "${rootProject.name}-velocity"
         archiveClassifier = ""

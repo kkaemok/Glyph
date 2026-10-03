@@ -172,7 +172,11 @@ tasks {
         prefix("org.yaml.snakeyaml")
         prefix("com.google.gson")
         prefix("it.unimi.dsi.fastutil")
+        relocate("kr.toxicity.hud.bootstrap.bukkit.compatibility.gps", "$groupString.bootstrap.bukkit.compatibility.gps")
         mergeServiceFiles()
+        filesMatching(listOf("META-INF/*.kotlin_module", "META-INF/services/**")) {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
     }
 }
 

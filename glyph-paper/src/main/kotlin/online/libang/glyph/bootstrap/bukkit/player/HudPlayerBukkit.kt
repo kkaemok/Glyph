@@ -42,9 +42,9 @@ class HudPlayerBukkit(
         )
     }
 
-    override fun scheduleUpdate(period: Long): online.libang.glyph.api.scheduler.HudTask {
+    override fun scheduleOwned(period: Long, action: () -> Unit): online.libang.glyph.api.scheduler.HudTask {
         val scheduled = player.scheduler.runAtFixedRate(BOOTSTRAP as org.bukkit.plugin.Plugin,
-            { update() }, null, 1, period)
+            { action() }, null, 1, period)
         return object : online.libang.glyph.api.scheduler.HudTask {
             override fun isCancelled(): Boolean = scheduled == null || scheduled.isCancelled
             override fun cancel() { scheduled?.cancel() }
@@ -68,6 +68,10 @@ class HudPlayerBukkit(
     }
 
     private fun initBossBar(action: () -> Unit) {
+        player.scheduler.run(BOOTSTRAP as org.bukkit.plugin.Plugin, { initBossBarOwned(action) }, null)
+    }
+
+    private fun initBossBarOwned(action: () -> Unit) {
         val bars = ArrayList<BossBar>()
         for (bossBar in Bukkit.getBossBars()) {
             if (bossBar.players.any {

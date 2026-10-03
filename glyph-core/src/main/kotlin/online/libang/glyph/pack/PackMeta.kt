@@ -47,13 +47,14 @@ data class PackMeta(
             .create()
 
         val default by lazy {
+            val maxFormat = PackOverlay.entries.maxOf { it.maxVersion }
             PackMeta(
                 Pack(
-                    BOOTSTRAP.mcmetaVersion(),
+                    maxFormat,
                     "Glyph's default resource pack.",
-                    VersionRange(84, BOOTSTRAP.mcmetaVersion()),
+                    VersionRange(84, maxFormat),
                     VersionFormat(84),
-                    VersionFormat(BOOTSTRAP.mcmetaVersion())
+                    VersionFormat(maxFormat)
                 ),
                 Overlay(PackOverlay.entries.map {
                     OverlayEntry(

@@ -15,9 +15,9 @@ internal object BossBarPacketCodec {
         GsonComponentSerializer.gson().deserialize(CraftChatMessage.toJSON(component))
     fun color(color: BossBar.Color): BossEvent.BossBarColor = BossEvent.BossBarColor.valueOf(color.name)
     fun event(id: UUID, name: Component, color: BossBar.Color): BossEvent =
-        BossEvent(id, native(name), color(color), BossEvent.BossBarOverlay.PROGRESS).apply { progress = 0f }
+        object : BossEvent(id, native(name), color(color), BossEvent.BossBarOverlay.PROGRESS) {}.apply { progress = 0f }
     fun copy(id: UUID, source: BossEvent): BossEvent =
-        BossEvent(id, source.name, source.color, source.overlay).apply {
+        object : BossEvent(id, source.name, source.color, source.overlay) {}.apply {
             progress = source.progress
             setDarkenScreen(source.shouldDarkenScreen())
             setPlayBossMusic(source.shouldPlayBossMusic())

@@ -63,7 +63,7 @@ class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
     }.getOrDefault(false)
 
     private val scheduler = PaperScheduler(this)
-    private val updateTask = ArrayList<PlaceholderTask>()
+    private val updateTask = java.util.concurrent.CopyOnWriteArrayList<PlaceholderTask>()
     private val minecraftVersion by lazy {
         Bukkit.getBukkitVersion()
             .substringBefore('-')
@@ -285,20 +285,22 @@ class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
     }
 
     override fun sendResourcePack(player: HudPlayer) {
-        PackUploader.server?.let {
-            (player.handle() as Player).setResourcePack(it.uuid, it.url, it.digest, null, false)
-        }
+        requestPack(player.handle() as Player)
+    }
+    private fun requestPack(player: Player) {
+        val pack = PackUploader.server ?: return
+        val identity = online.libang.glyph.pack.PackUUID.requestIdentity
+        val request = net.kyori.adventure.resource.ResourcePackRequest.resourcePackRequest()
+            .packs(net.kyori.adventure.resource.ResourcePackInfo.resourcePackInfo(identity, java.net.URI.create(pack.url), pack.digestString))
+            .replace(false).required(false).build()
+        player.scheduler.run(this, { player.sendResourcePacks(request) }, null)
     }
     override fun postEffects(player: HudPlayer): online.libang.glyph.api.effect.PostEffects =
         if (minecraftVersion >= MinecraftVersion.V26_3)
             online.libang.glyph.bootstrap.bukkit.effect.PaperPostEffects(player.handle() as Player)
         else online.libang.glyph.api.effect.PostEffects.unsupported()
     override fun sendResourcePack() {
-        PackUploader.server?.let {
-            Bukkit.getOnlinePlayers().forEach { player ->
-                player.setResourcePack(it.uuid, it.url, it.digest, null, false)
-            }
-        }
+        Bukkit.getOnlinePlayers().forEach(::requestPack)
     }
 
     override fun minecraftVersion(): MinecraftVersion = minecraftVersion

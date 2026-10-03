@@ -30,7 +30,7 @@ object PlaceholderManagerImpl : PlaceholderManager, GlyphManager {
     private val stringPattern = Pattern.compile("'(?<content>[\\w|\\W]+)'")
     private val equationPatter = Pattern.compile("(@(?<equation>(([()\\-+*./%, ]|[a-zA-Z]|[0-9])+)))")
 
-    private val doubleDecimal = DecimalFormat("#.###")
+    private val doubleDecimal = ThreadLocal.withInitial { DecimalFormat("#.###") }
 
     private val number = PlaceholderContainerImpl(
         "number",
@@ -66,7 +66,7 @@ object PlaceholderManagerImpl : PlaceholderManager, GlyphManager {
             it.toDoubleOrNull()
         },
         {
-            doubleDecimal.format(it)
+            doubleDecimal.get().format(it)
         },
         mapOf(
             "evaluate" to { n, e ->

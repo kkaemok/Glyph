@@ -137,7 +137,8 @@ class BukkitEntityModule : BukkitModule {
                 u.unwrap { e: EntityEvent ->
                     val entity = e.entity.adapt
                     Function {
-                        (entity.customName ?: entity.name).toMiniMessageString()
+                        entity.customName()?.let { net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(it) }
+                            ?: entity.name.toMiniMessageString()
                     }
                 }
             },

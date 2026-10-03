@@ -14,6 +14,7 @@ data class PackUUID(
     val uuid: UUID
 ) {
     companion object {
+        val requestIdentity: UUID = UUID.nameUUIDFromBytes("online.libang.glyph:generated".toByteArray(Charsets.UTF_8))
 
         private val cacheFile by lazy {
             File(DATA_FOLDER.subFolder(".cache"), "pack-digest.txt")

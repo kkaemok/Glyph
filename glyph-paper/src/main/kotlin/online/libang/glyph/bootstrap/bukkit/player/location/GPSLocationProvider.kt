@@ -5,7 +5,8 @@ import online.libang.glyph.api.player.HudPlayer
 import online.libang.glyph.api.player.PointedLocation
 import online.libang.glyph.api.player.PointedLocationProvider
 import online.libang.glyph.api.player.PointedLocationSource
-import online.libang.glyph.bootstrap.bukkit.compatibility.gps.GPSWrapper
+// The checked-in bridge is compiled under its upstream package; Shadow relocates it in the artifact.
+import kr.toxicity.hud.bootstrap.bukkit.compatibility.gps.GPSWrapper
 import online.libang.glyph.bootstrap.bukkit.util.bukkitPlayer
 
 class GPSLocationProvider : PointedLocationProvider {

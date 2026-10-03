@@ -25,7 +25,7 @@ abstract class HudPlayerImpl : HudPlayer {
 
     private var tick = 0L
     private var last: WidthComponent = EMPTY_WIDTH_COMPONENT
-    private var additionalComp: WidthComponent? = null
+    @Volatile private var additionalComp: WidthComponent? = null
     private val variable = ConcurrentHashMap<String, String>()
     private val popupGroup = ConcurrentHashMap<String, PopupIteratorGroup>()
     private val popupKey = ConcurrentHashMap<Any, PopupUpdater>()
@@ -45,7 +45,7 @@ abstract class HudPlayerImpl : HudPlayer {
         }
     }
     private val locationProvide = HudPlayerTask {
-        asyncTaskTimer(ConfigManagerImpl.locationProvideTime, ConfigManagerImpl.locationProvideTime) {
+        scheduleOwned(ConfigManagerImpl.locationProvideTime.coerceAtLeast(1)) {
             PlayerManagerImpl.provideLocation(this)
         }
     }
@@ -97,7 +97,9 @@ abstract class HudPlayerImpl : HudPlayer {
     }
 
     protected open fun scheduleUpdate(period: Long): online.libang.glyph.api.scheduler.HudTask =
-        asyncTaskTimer(1, period) { update() }
+        scheduleOwned(period) { update() }
+    protected open fun scheduleOwned(period: Long, action: () -> Unit): online.libang.glyph.api.scheduler.HudTask =
+        asyncTaskTimer(1, period, action)
 
     protected abstract fun updatePlaceholder()
 
@@ -159,7 +161,7 @@ abstract class HudPlayerImpl : HudPlayer {
         }
     }
 
-    override fun reload() {
+    @Synchronized override fun reload() {
         renderCache.invalidate()
         autoSave.restart()
         locationProvide.restart()

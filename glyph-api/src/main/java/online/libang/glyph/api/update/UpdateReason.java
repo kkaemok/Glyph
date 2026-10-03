@@ -17,10 +17,6 @@ public enum UpdateReason {
      */
     VELOCITY_EVENT,
     /**
-     * For Fabric
-     */
-    FABRIC_EVENT,
-    /**
      * Unknown
      */
     OTHER

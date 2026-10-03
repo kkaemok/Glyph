@@ -1,4 +1,4 @@
-package online.libang.glyph.bootstrap.bukkit.util
+package online.libang.glyph.util
 
 import online.libang.glyph.util.LEGACY_SECTION_SERIALIZER
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -14,12 +14,12 @@ class NameSerializerTest {
 
     @Test
     fun legacyColorCodeIsConverted() {
-        assertEquals("<red>Zombie", "§cZombie".toMiniMessageString())
+        assertEquals("<red>Zombie", "짠cZombie".toMiniMessageString())
     }
 
     @Test
     fun hexColorCodeIsConverted() {
-        assertEquals("<#FFD800>Test", "§x§F§F§D§8§0§0Test".toMiniMessageString())
+        assertEquals("<#FFD800>Test", "짠x짠F짠F짠D짠8짠0짠0Test".toMiniMessageString())
     }
 
     @Test
@@ -37,7 +37,7 @@ class NameSerializerTest {
 
     @Test
     fun conversionRoundTripsThroughMiniMessage() {
-        val input = "§cCustom §lName"
+        val input = "짠cCustom 짠lName"
         val result = input.toMiniMessageString()
         val expected = LEGACY_SECTION_SERIALIZER.deserialize(input)
         assertEquals(expected, MiniMessage.miniMessage().deserialize(result))

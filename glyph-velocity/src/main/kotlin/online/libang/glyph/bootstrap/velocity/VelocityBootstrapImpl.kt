@@ -192,8 +192,8 @@ class VelocityBootstrapImpl @Inject constructor(
         PackUploader.server?.let {
             (player.handle() as Player).sendResourcePackOffer(proxyServer.createResourcePackBuilder(it.url)
                 .setHash(it.digest)
-                .setId(it.uuid)
-                .setShouldForce(true)
+                  .setId(online.libang.glyph.pack.PackUUID.requestIdentity)
+                .setShouldForce(false)
                 .build())
         }
     }
@@ -201,17 +201,17 @@ class VelocityBootstrapImpl @Inject constructor(
         PackUploader.server?.let {
             val info = proxyServer.createResourcePackBuilder(it.url)
                 .setHash(it.digest)
-                .setId(it.uuid)
-                .setShouldForce(true)
+                .setId(online.libang.glyph.pack.PackUUID.requestIdentity)
+                .setShouldForce(false)
                 .build()
-            proxyServer.allServers.forEach { p ->
-                p.sendResourcePacks(info)
+            proxyServer.allPlayers.forEach { p ->
+                p.sendResourcePackOffer(info)
             }
         }
     }
 
     override fun minecraftVersion(): MinecraftVersion = MinecraftVersion.LATEST
-    override fun mcmetaVersion(): Int = 84
+    override fun mcmetaVersion(): Int = online.libang.glyph.pack.PackOverlay.entries.maxOf { it.maxVersion }
 
     override fun world(name: String): WorldWrapper? = null
     override fun worlds(): List<WorldWrapper> = emptyList()

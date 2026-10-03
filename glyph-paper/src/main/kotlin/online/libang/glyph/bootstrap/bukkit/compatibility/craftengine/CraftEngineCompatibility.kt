@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 
 class CraftEngineCompatibility : Compatibility {
+    private var registeredOutput: java.nio.file.Path? = null
     override val website: String = "https://polymart.org/product/7624/craftengine"
     override val triggers: Map<String, (YamlObject) -> HudTrigger<*>> = mapOf()
     override val listeners: Map<String, (YamlObject) -> (UpdateEvent) -> HudListener> = mapOf()
@@ -32,15 +33,31 @@ class CraftEngineCompatibility : Compatibility {
         if (ConfigManagerImpl.mergeWithExternalResources) (BOOTSTRAP as BukkitBootstrapImpl).skipInitialReload = true
         registerListener(object : Listener {
             @EventHandler
+            @Synchronized
             fun AsyncResourcePackCacheEvent.generate() {
                 if (!ConfigManagerImpl.mergeWithExternalResources) return
                 when (val result = PLUGIN.reload()) {
                     is ReloadState.Success -> {
                         result.directory()?.let {
-                            when {
-                                it.isFile -> cacheData().externalZips().add(it.toPath())
-                                it.isDirectory -> cacheData().externalFolders().add(it.toPath())
+                            val cache = cacheData()
+                            val nativePacks = net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine.instance()
+                                .packManager().loadedPacks().filter { pack -> pack.enabled() }
+                                .flatMap { pack -> pack.resourcePackFolders().toList() }
+                            val existing = (nativePacks + cache.externalFolders() + cache.externalZips()).filter { path -> path != registeredOutput }
+                            try {
+                                online.libang.glyph.pack.PackConflictInspector.validate(it.toPath(), existing, BOOTSTRAP.mcmetaVersion())
+                            } catch (conflict: IllegalArgumentException) {
+                                registeredOutput?.let { path -> cache.externalFolders().remove(path); cache.externalZips().remove(path) }
+                                registeredOutput = null
+                                conflict.handle("Glyph/CraftEngine pack conflict; Glyph assets were not registered. Choose one shader/font/post-effect owner.")
+                                return
                             }
+                            registeredOutput?.let { path -> cache.externalFolders().remove(path); cache.externalZips().remove(path) }
+                            when {
+                                it.isFile -> { cache.externalFolders().remove(it.toPath()); cache.externalZips().add(it.toPath()) }
+                                it.isDirectory -> { cache.externalZips().remove(it.toPath()); cache.externalFolders().add(it.toPath()) }
+                            }
+                            registeredOutput = it.toPath()
                             info("Successfully merged with CraftEngine.")
                         }
                     }

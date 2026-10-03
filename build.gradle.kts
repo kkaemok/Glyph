@@ -8,6 +8,7 @@ val velocity = project(":glyph-velocity")
 tasks.register("pluginJar") { dependsOn(paper.tasks.named("build")) }
 tasks.register("velocityJar") { dependsOn(velocity.tasks.named("build")) }
 tasks.named("build") { dependsOn(paper.tasks.named("build"), velocity.tasks.named("build")) }
+tasks.named("jar") { enabled = false }
 runPaper { disablePluginJarDetection() }
 tasks.runServer {
     version(property("minecraft_version").toString())

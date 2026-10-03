@@ -42,7 +42,7 @@ mavenPublishing {
         name = publishName
         description = "A high-performance HUD engine for Paper and Velocity, based on BetterHud."
         inceptionYear = "2024"
-        url = "https://github.com/toxicity188/Glyph/"
+        url = "https://github.com/toxicity188/BetterHud/"
         licenses {
             license {
                 name = "MIT License"
@@ -56,10 +56,6 @@ mavenPublishing {
                 url = "https://github.com/toxicity188/"
             }
         }
-        scm {
-            url = "https://github.com/toxicity188/Glyph/"
-            connection = "scm:git:git://github.com/toxicity188/Glyph.git"
-            developerConnection = "scm:git:ssh://git@github.com/toxicity188/Glyph.git"
-        }
+        // Glyph's downstream SCM URL can be added when this fork is published.
     }
 }

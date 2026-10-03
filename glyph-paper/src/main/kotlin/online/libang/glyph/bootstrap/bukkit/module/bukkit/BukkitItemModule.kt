@@ -90,7 +90,8 @@ class BukkitItemModule : BukkitModule {
             "display_name" to HudPlaceholder.of { _, u ->
                 u.unwrap { e: UpdateItemEvent ->
                     Function {
-                        e.itemMeta.displayName
+                        e.itemMeta.displayName()?.let { net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(it) }
+                            ?: e.itemStack.type.name
                     }
                 }
             },

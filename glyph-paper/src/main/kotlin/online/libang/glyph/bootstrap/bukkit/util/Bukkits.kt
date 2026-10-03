@@ -35,7 +35,7 @@ val Player.hudPlayer
  * MiniMessage-special characters), so the result can be safely embedded into a text pattern.
  * </p>
  */
-fun String.toMiniMessageString() = MiniMessage.miniMessage().serialize(LEGACY_SECTION_SERIALIZER.deserialize(this))
+fun String.toMiniMessageString() = online.libang.glyph.util.legacyNameToMiniMessage(this)
 
 fun Event.call(): Boolean {
     Bukkit.getPluginManager().callEvent(this)

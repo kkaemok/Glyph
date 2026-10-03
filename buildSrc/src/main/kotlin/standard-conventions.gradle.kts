@@ -24,6 +24,13 @@ tasks {
     }
 }
 
+tasks.withType<Jar>().configureEach {
+    from(rootProject.file("LICENSE")) {
+        into("META-INF")
+        rename("LICENSE", "LICENSE-Glyph.txt")
+    }
+}
+
 java {
     disableAutoTargetJvm()
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)

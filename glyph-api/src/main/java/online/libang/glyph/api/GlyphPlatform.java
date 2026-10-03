@@ -20,11 +20,7 @@ public enum GlyphPlatform {
     /**
      * Checks Velocity
      */
-    VELOCITY(GlyphBootstrap::isVelocity),
-    /**
-     * Checks Fabric server
-     */
-    ;
+    VELOCITY(GlyphBootstrap::isVelocity);
 
     /**
      * All platform.

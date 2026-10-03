@@ -44,6 +44,7 @@ class TextRenderer(
     }
 
     private val parsedPatter = PlaceholderManagerImpl.parse(pattern, this)
+    private val decimalFormat = ThreadLocal.withInitial { numberFormat.clone() as java.text.DecimalFormat }
 
     private val widthViewer = ValueViewer<Pair<Style, Int>, Int>()
         .addFunction(
@@ -187,7 +188,7 @@ class TextRenderer(
                 .replacement { r, _ ->
                     val g = r.group()
                     Component.text(runCatching {
-                        numberFormat.format(numberEquation evaluate g.toDouble())
+                        decimalFormat.get().format(numberEquation evaluate g.toDouble())
                     }.getOrDefault(g))
                 }
                 .build())
