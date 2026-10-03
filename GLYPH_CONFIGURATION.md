@@ -3,6 +3,16 @@
 Existing absolute layouts remain the default. These examples extend the usual
 BetterHud `images`, `layouts` and `huds` files; they are not standalone pack files.
 
+## Default HUD and resource pack
+
+The shipped `default-hud` list enables `test_hud`. The client must also load the
+generated pack (`plugins/Glyph/build.zip` with the default output path). Pack
+self-hosting is disabled by default. For CraftEngine distribution, keep
+`merge-with-external-resources: true` in Glyph's config, regenerate CraftEngine's
+pack, check for `Successfully merged with CraftEngine.`, and accept the updated
+pack on the client. Other distributors must include Glyph's generated assets in
+their final pack; distributing a different pack alone does not install them.
+
 ## Image libraries and selection
 
 An `images/icons.yml` declaration imports all PNGs under `assets/skills`:

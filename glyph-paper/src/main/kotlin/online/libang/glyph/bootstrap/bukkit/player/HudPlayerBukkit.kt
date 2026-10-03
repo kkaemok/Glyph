@@ -5,7 +5,6 @@ import online.libang.glyph.api.adapter.WorldWrapper
 import online.libang.glyph.bootstrap.bukkit.BukkitBootstrapImpl
 import online.libang.glyph.player.HudPlayerImpl
 import online.libang.glyph.util.BOOTSTRAP
-import online.libang.glyph.util.asyncTaskLater
 import net.kyori.adventure.audience.Audience
 import org.bukkit.Bukkit
 import org.bukkit.boss.BossBar

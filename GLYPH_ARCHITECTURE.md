@@ -41,6 +41,11 @@ Keep per-player ticking initially; batch only after profiling demonstrates a
 benefit and entity ownership remains correct. Stagger autosaves by UUID to
 avoid synchronized disk/database bursts.
 
+Player task holders stay stopped during construction. Platform player fields,
+default HUD objects and bossbar injection must be ready before ticking,
+autosave and location tasks start. Reload rebuilds objects before restarting
+tasks; restart cancels the prior task before asking the scheduler for a new one.
+
 ## Packs and shaders
 
 Compile a sorted, validated map once for ZIP/directory outputs. Paths and bytes

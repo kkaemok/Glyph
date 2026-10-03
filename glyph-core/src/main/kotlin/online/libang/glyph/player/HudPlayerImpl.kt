@@ -55,6 +55,15 @@ abstract class HudPlayerImpl : HudPlayer {
             type.defaultObjects().forEach { it.add(this) }
         }
         VOLATILE_CODE.inject(this, ShaderManagerImpl.barColor)
+        // Platform fields and the bossbar transport must exist before any
+        // scheduled callback or UUID-based autosave staggering can run.
+        restartTasks()
+    }
+
+    private fun restartTasks() {
+        autoSave.restart()
+        locationProvide.restart()
+        startTick()
     }
 
     final override fun getHudComponent(): WidthComponent = last
@@ -163,9 +172,6 @@ abstract class HudPlayerImpl : HudPlayer {
 
     @Synchronized override fun reload() {
         renderCache.invalidate()
-        autoSave.restart()
-        locationProvide.restart()
-        startTick()
         val popupNames = popups.toNonDefaultNames()
         val hudNames = huds.toNonDefaultNames()
         val compassNames = compasses.toNonDefaultNames()
@@ -179,6 +185,7 @@ abstract class HudPlayerImpl : HudPlayer {
         hudNames.toNonDefaultHud().forEach { it.add(this) }
         popupNames.toNonDefaultPopup().forEach { it.add(this) }
         compassNames.toNonDefaultCompass().forEach { it.add(this) }
+        restartTasks()
     }
 
     final override fun cancel() {

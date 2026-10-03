@@ -28,6 +28,23 @@ in either distribution. Logs and the local archive checker are under `.validatio
 
 ## Reproducible profiling
 
+### Player initialization regression (2026-10-04)
+
+A reported Leaf 26.3 join failure exposed a base-constructor call into
+`HudPlayerBukkit.scheduleOwned` before Kotlin assigned its `player` field. Two
+regression tests reproduced the same null-owner stack through the real
+`HudPlayerImpl` constructor before the fix. Task holders now defer creation;
+injection starts tasks after platform fields, default objects and transport are
+ready. Reload also starts tasks after rebuilding objects. A third test checks
+that a failed scheduler restart cancels the previous task without leaking it.
+
+`gradlew.bat :glyph-core:test build --console=plain --max-workers=2` passed in
+1m 54s: 37 core tests plus Paper/Velocity compatibility checks, 39 total with
+zero failures/errors/skips. Both distributions were rebuilt. The regression is
+verified without a server; no live Leaf/client retest was performed here.
+
+### Server profiling scenarios
+
 Use the same Java/server/client versions, configs, hardware and warm-up for
 BetterHud and Glyph. Save spark allocation/CPU profiles or JFR recordings.
 Run each scenario repeatedly for 1, 20 and 100+ players where feasible:
