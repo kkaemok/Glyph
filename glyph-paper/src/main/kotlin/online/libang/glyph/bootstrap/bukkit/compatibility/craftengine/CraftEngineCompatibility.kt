@@ -45,7 +45,8 @@ class CraftEngineCompatibility : Compatibility {
                                 .flatMap { pack -> pack.resourcePackFolders().toList() }
                             val existing = (nativePacks + cache.externalFolders() + cache.externalZips()).filter { path -> path != registeredOutput }
                             try {
-                                online.libang.glyph.pack.PackConflictInspector.validate(it.toPath(), existing, BOOTSTRAP.mcmetaVersion())
+                                online.libang.glyph.pack.PackConflictInspector.validate(it.toPath(), existing,
+                                    online.libang.glyph.pack.PackMeta.VersionFormat(BOOTSTRAP.mcmetaVersion(), BOOTSTRAP.mcmetaMinorVersion()))
                             } catch (conflict: IllegalArgumentException) {
                                 registeredOutput?.let { path -> cache.externalFolders().remove(path); cache.externalZips().remove(path) }
                                 registeredOutput = null

@@ -26,6 +26,35 @@ are bundled, and `META-INF/LICENSE-Glyph.txt` exactly matches the preserved MIT
 license. No Fabric, 1.21 adapter or old BetterHud implementation classes remain
 in either distribution. Logs and the local archive checker are under `.validation`.
 
+## Pack-format merge regression (2026-10-04)
+
+Client OpenGL/Vulkan logs and the downloaded CraftEngine pack confirmed Glyph
+fonts/textures were present, but the `glyph_26_3` overlay had `max_format: [97,0]`
+while the client used format 97.1. Minecraft's own 26.3 overlay codec selected no
+Glyph overlay for that cached pack. This isolates a real metadata failure without
+requiring a shader syntax error in the client log.
+
+Glyph now emits explicit full upper bounds, including all minor versions of the
+supported major, to survive CraftEngine's integer-to-array normalization. Parsing
+also preserves Minecraft's different integer lower/upper semantics, modern
+overlays without legacy `formats`, and component descriptions. Conflict checks
+use both resource-format components; modern generated metadata omits obsolete
+format fields. Root range intersections reject incompatible pack combinations.
+
+The full build passed in 2m 34s: 43 core tests and Paper/Velocity compatibility
+checks, 45 total with zero failures/errors/skips. Both jar archives passed checks.
+`tools/packs/ValidatePackMetadata.java`, using the official client and libraries,
+confirmed generated metadata activates exactly the expected overlay at 84.0,
+88.0 and 97.1, excludes 98.0, and activates `glyph_26_3` after a round-trip through
+CraftEngine 26.9.1's actual `Overlay` parser/serializer. The cached pack selected
+`[]`; corrected metadata selected `[glyph_26_3]`. Regenerate the distributed pack
+after installing the rebuilt jar. These codec checks do not certify visual
+rendering on the user's client; a refreshed pack/client retest remains necessary.
+
+Minecraft's [minor-format rules](https://www.minecraft.net/en-us/article/minecraft-snapshot-25w31a)
+define integer upper bounds as every minor of that major;
+[26.3 uses resource format 97.1](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-3).
+
 ## Reproducible profiling
 
 ### Player initialization regression (2026-10-04)

@@ -305,6 +305,7 @@ class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
 
     override fun minecraftVersion(): MinecraftVersion = minecraftVersion
     override fun mcmetaVersion(): Int = nms.version.metaVersion
+    override fun mcmetaMinorVersion(): Int = nms.version.metaMinorVersion
     override fun triggerListener(): Listener = listener
 
     override fun world(name: String): WorldWrapper? {

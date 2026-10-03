@@ -44,7 +44,7 @@ public enum NMSVersion {
      */
     V26_R2(26,2, 88),
     /** Minecraft 26.3. */
-    V26_R3(26,3, 97)
+    V26_R3(26,3, 97, 1)
     ;
     /**
      * Main version.
@@ -58,10 +58,16 @@ public enum NMSVersion {
      * That client version's resource pack mcmeta version.
      */
     private final int metaVersion;
+    private final int metaMinorVersion;
 
     NMSVersion(int version, int subVersion, int metaVersion) {
+        this(version, subVersion, metaVersion, 0);
+    }
+
+    NMSVersion(int version, int subVersion, int metaVersion, int metaMinorVersion) {
         this.version = version;
         this.subVersion = subVersion;
         this.metaVersion = metaVersion;
+        this.metaMinorVersion = metaMinorVersion;
     }
 }

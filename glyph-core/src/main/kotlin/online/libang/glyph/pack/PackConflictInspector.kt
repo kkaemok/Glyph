@@ -9,13 +9,17 @@ import java.util.zip.ZipFile
 @ApiStatus.Internal
 object PackConflictInspector {
     fun validate(primary: Path, external: Collection<Path>, format: Int) {
+        validate(primary, external, PackMeta.VersionFormat(format))
+    }
+
+    fun validate(primary: Path, external: Collection<Path>, format: PackMeta.VersionFormat) {
         val builder = CompiledPack.Builder()
         for (path in (listOf(primary) + external).distinct()) {
             readAssets(path, format).forEach { (name, bytes) -> builder.add(name, bytes, path.toString()) }
         }
     }
 
-    private fun readAssets(path: Path, format: Int): Map<String, ByteArray> {
+    private fun readAssets(path: Path, format: PackMeta.VersionFormat): Map<String, ByteArray> {
         if (!Files.exists(path)) return emptyMap()
         val raw = HashMap<String, ByteArray>()
         if (Files.isDirectory(path)) {
@@ -37,7 +41,7 @@ object PackConflictInspector {
         val effective = raw.filterKeys { it.startsWith("assets/") }.toMutableMap()
         raw["pack.mcmeta"]?.let { bytes ->
             for (entry in PackMeta.from(bytes).overlays?.entries.orEmpty()) {
-                if (format in entry.formats.min..entry.formats.max) {
+                if (entry.appliesTo(format)) {
                     CompiledPack.validatePath(entry.directory)
                     val prefix = "${entry.directory}/assets/"
                     raw.filterKeys { it.startsWith(prefix) }.forEach { (name, data) ->

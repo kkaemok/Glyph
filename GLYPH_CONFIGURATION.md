@@ -13,6 +13,11 @@ pack, check for `Successfully merged with CraftEngine.`, and accept the updated
 pack on the client. Other distributors must include Glyph's generated assets in
 their final pack; distributing a different pack alone does not install them.
 
+On 26.3 the final pack's `glyph_26_3` overlay must include format 97.1. An old
+`max_format: [97,0]` skips the HUD shaders even when the fonts are present. Install
+the fixed jar and regenerate the distributor's pack so its content/hash changes;
+replacing the jar alone does not update an already downloaded merged pack.
+
 ## Image libraries and selection
 
 An `images/icons.yml` declaration imports all PNGs under `assets/skills`:

@@ -109,3 +109,10 @@ entrypoint. The script never merges or changes the base automatically.
 Compilation and offline shader success do not establish live Folia, client,
 CraftEngine, CustomNameplates or TAB correctness. The outstanding validation
 matrix and actual primitive-profile measurements are in GLYPH_PERFORMANCE.md.
+
+The 2026-10-04 client report exposed CraftEngine narrowing integer overlay upper
+bounds to major.0. Glyph's bounded 26.3 overlay consequently excluded the actual
+97.1 client. Explicit full minor bounds, modern metadata parsing/serialization,
+and minor-aware collision checks now preserve the intended range. This divergence
+is validated through Minecraft's overlay codec and CraftEngine's actual serializer;
+carry it forward during upstream pack/compiler ports.

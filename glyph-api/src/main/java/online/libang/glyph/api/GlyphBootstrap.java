@@ -150,6 +150,9 @@ public interface GlyphBootstrap {
      */
     int mcmetaVersion();
 
+    /** The resource format's minor version, separate from its major version. */
+    default int mcmetaMinorVersion() { return 0; }
+
     /**
      * Finds some world by given name.
      * @param name world name

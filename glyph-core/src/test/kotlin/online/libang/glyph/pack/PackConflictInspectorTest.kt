@@ -4,6 +4,23 @@ import java.nio.file.Files
 import kotlin.test.*
 
 class PackConflictInspectorTest {
+    @Test fun `modern minor bounds select overlays without legacy formats`() {
+        val root = Files.createTempDirectory("glyph-pack-minor")
+        try {
+            val primary = root.resolve("primary")
+            val other = root.resolve("other")
+            val shader = "assets/minecraft/shaders/core/text.vsh"
+            DirectoryPackOutput(true).write(CompiledPack.of(mapOf(
+                "pack.mcmeta" to """{"pack":{"description":{"text":"CraftEngine"},"min_format":[97,1],"max_format":[97,1]},"overlays":{"entries":[{"directory":"minor_one","min_format":[97,1],"max_format":[97,1]}]}}""".toByteArray(),
+                "minor_one/$shader" to "glyph".toByteArray())), primary)
+            DirectoryPackOutput(true).write(CompiledPack.of(mapOf(shader to "external".toByteArray())), other)
+            PackConflictInspector.validate(primary, listOf(other), PackMeta.VersionFormat(97, 0))
+            assertFailsWith<IllegalArgumentException> {
+                PackConflictInspector.validate(primary, listOf(other), PackMeta.VersionFormat(97, 1))
+            }
+            PackConflictInspector.validate(primary, listOf(other), PackMeta.VersionFormat(97, 2))
+        } finally { root.toFile().deleteRecursively() }
+    }
     @Test fun `active overlay conflicts with external base shader`() {
         val root = Files.createTempDirectory("glyph-pack-overlay")
         try {
