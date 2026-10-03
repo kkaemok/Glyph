@@ -1,4 +1,5 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : enable
 
 #CreateConstant
 
@@ -8,22 +9,22 @@
 
 #if SHADER_VERSION >= 2
 #moj_import <dynamictransforms.glsl>
-in float sphericalVertexDistance;
-in float cylindricalVertexDistance;
+layout(location = 0) in float sphericalVertexDistance;
+layout(location = 1) in float cylindricalVertexDistance;
 #else
 uniform vec4 ColorModulator;
 uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
-in float vertexDistance;
+layout(location = 0) in float vertexDistance;
 #endif
 
 uniform sampler2D Sampler0;
 
-in vec4 vertexColor;
-in vec2 texCoord0;
+layout(location = 2) in vec4 vertexColor;
+layout(location = 3) in vec2 texCoord0;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 #GenerateOtherDefinedMethod
 

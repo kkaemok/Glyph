@@ -27,6 +27,8 @@ layout(location = 1) out float cylindricalVertexDistance;
 layout(location = 2) out vec4 vertexColor;
 layout(location = 3) out vec2 texCoord0;
 
+bool range(float value, float low, float high) { return value >= low && value <= high; }
+bool range(vec3 value, vec3 low, vec3 high) { return all(greaterThanEqual(value, low)) && all(lessThanEqual(value, high)); }
 #GenerateOtherDefinedMethod
 void main() {
     vec3 pos = Position;

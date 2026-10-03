@@ -1,4 +1,5 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : enable
 
 #CreateConstant
 
@@ -11,22 +12,22 @@
 #moj_import <dynamictransforms.glsl>
 #moj_import <projection.glsl>
 #moj_import <globals.glsl>
-out float sphericalVertexDistance;
-out float cylindricalVertexDistance;
+layout(location = 0) out float sphericalVertexDistance;
+layout(location = 1) out float cylindricalVertexDistance;
 #else
 uniform mat4 ProjMat;
 uniform mat4 ModelViewMat;
 uniform int FogShape;
-out float vertexDistance;
+layout(location = 0) out float vertexDistance;
 uniform vec2 ScreenSize;
 uniform float GameTime;
 #endif
 
-in vec3 Position;
-in vec4 Color;
-in vec2 UV0;
+layout(location = 0) in vec3 Position;
+layout(location = 1) in vec4 Color;
+layout(location = 2) in vec2 UV0;
 #if !defined(IS_GUI) && !defined(IS_SEE_THROUGH)
-in ivec2 UV2;
+layout(location = 3) in ivec2 UV2;
 #endif
 
 uniform sampler2D Sampler0;
@@ -34,8 +35,8 @@ uniform sampler2D Sampler0;
 uniform sampler2D Sampler2;
 #endif
 
-out vec4 vertexColor;
-out vec2 texCoord0;
+layout(location = 2) out vec4 vertexColor;
+layout(location = 3) out vec2 texCoord0;
 
 bool range(float t, float m1, float m2) {
     return t >= m1 && t <= m2;
