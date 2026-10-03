@@ -10,3 +10,13 @@ dependencies {
     testImplementation(libs.bundles.adventure)
     testImplementation(libs.bundles.library)
 }
+
+tasks.register<JavaExec>("profileCore") {
+    group = "verification"
+    description = "Profile state, dependency cache and send decisions without Minecraft."
+    dependsOn(tasks.testClasses)
+    classpath = sourceSets.test.get().runtimeClasspath
+    mainClass = "online.libang.glyph.renderer.CoreProfile"
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+    jvmArgs("-XX:StartFlightRecording=filename=${layout.buildDirectory.get()}/core-profile.jfr,settings=profile,dumponexit=true")
+}

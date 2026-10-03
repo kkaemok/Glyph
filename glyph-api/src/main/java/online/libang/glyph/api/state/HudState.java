@@ -23,6 +23,11 @@ public final class HudState {
         var copied = Map.copyOf(changes);
         while (true) {
             var before = current.get();
+            boolean differs = false;
+            for (var entry : copied.entrySet()) {
+                if (!Objects.equals(before.get(entry.getKey()), entry.getValue())) { differs = true; break; }
+            }
+            if (!differs) return false;
             var values = new HashMap<>(before.values());
             var versions = new HashMap<>(before.versions());
             boolean changed = false;

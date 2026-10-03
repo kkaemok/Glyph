@@ -15,7 +15,9 @@ internal class DependencyCache<T>(private val dependencies: List<String>) {
         }
         if (!dirty) return value as T
         val rendered = render() // Failed rendering does not advance the cache.
-        versions = LongArray(dependencies.size) { snapshot.version(dependencies[it]) }
+        versions = (previous ?: LongArray(dependencies.size)).also { next ->
+            for (i in dependencies.indices) next[i] = snapshot.version(dependencies[i])
+        }
         value = rendered
         return rendered
     }
