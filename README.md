@@ -8,7 +8,7 @@ Glyph is an independent downstream fork of [BetterHud dev](https://github.com/to
 
 Open this directory as a Gradle project in IntelliJ IDEA and select a Java 25 Gradle JVM. Run `gradlew.bat build` on Windows or `./gradlew build` elsewhere. The wrapper supplies Gradle; any compatible Java 25 vendor works.
 
-Paper and Velocity distributions are written to `build/libs`. `pluginJar` and `velocityJar` build individual distributions. `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
+Paper and Velocity distributions are written to `build/libs` (`Glyph-paper` and `Glyph-velocity`). `pluginJar` and `velocityJar` build individual distributions. `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
 
 Fabric and Minecraft 1.21 implementations are intentionally removed. Private libraries are bundled at build time. Glyph does not inject URLs into server classloaders, publish to BetterHud registries or report to BetterHud metrics IDs.
 
@@ -26,12 +26,21 @@ On Paper 26.3, call `GlyphAPI.inst().postEffects(player)` on the player's owning
 
 Conflicting pack assets, including `minecraft:end_of_frame`, require explicit resolution rather than silent overwrite.
 
+## Layouts and images
+
+Glyph adds rows with measured widths, compiled columns and stacks alongside
+absolute layouts. Image directories can provide an entire selectable icon
+library; dynamic patterns use bounded candidates and a fallback. Nine-slice
+sources generate named size variants with fixed corners and tiled/stretched
+edges. See [configuration examples](GLYPH_CONFIGURATION.md).
+
 ## Documentation
 
 - [Upstream review and sync policy](GLYPH_UPSTREAM_NOTES.md)
 - [Architecture](GLYPH_ARCHITECTURE.md)
 - [Validation and profiling](GLYPH_PERFORMANCE.md)
 - [Migration from BetterHud](GLYPH_MIGRATION.md)
+- [Configuration extensions](GLYPH_CONFIGURATION.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution

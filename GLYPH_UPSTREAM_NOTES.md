@@ -83,3 +83,29 @@ Never blindly merge `upstream/dev`. Update this file after each reviewed sync.
 
 Build and validation results are recorded in GLYPH_PERFORMANCE.md. Outstanding
 support must remain explicit; never claim untested client/server versions.
+
+## Implemented downstream changes (2026-10-03)
+
+The final fetch still resolves dev to `e6e835ecf3a382c496ceb7b4becc0b27374a644b`.
+`UPSTREAM_BASE` and `tools/upstream/review.ps1 -Fetch` provide a review-only sync
+entrypoint. The script never merges or changes the base automatically.
+
+- Ported #475 output suppression and #502 safe names with regression tests.
+- Retained #500 conditional inputs, then added explicit varying locations and a
+  separate 26.3 backend matched to the actual release's vanilla OIT shaders.
+- Replaced duplicate reflective boss-event byte decoding with named dispatch.
+  Kept the existing JSON/Adventure bridge pending a valid live conversion benchmark.
+- Reimplemented #355-inspired flow as ordered rows, compiled columns and stacks;
+  absolute semantics remain the default. Invalid legacy child definitions still
+  emit a child diagnostic rather than discarding other valid children.
+- Added bounded dynamic image libraries/selection (#442), named nine-slice size
+  variants (#383), frame sampling (#266), typed state and opt-in segment caching.
+- Fixed #480 by hashing paths and bytes and verifying both output types;
+  conflicting same-path assets fail with both origins, including active overlays.
+- Fixed #481 ordering to agree with equality and be antisymmetric/transitive.
+- Preserved existing async head loading, expiry and duplicate-load prevention;
+  shaded private dependencies instead of classloader/Unsafe injection (#447).
+
+Compilation and offline shader success do not establish live Folia, client,
+CraftEngine, CustomNameplates or TAB correctness. The outstanding validation
+matrix and actual primitive-profile measurements are in GLYPH_PERFORMANCE.md.

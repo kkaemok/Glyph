@@ -28,12 +28,13 @@ Legacy placeholders remain polling-compatible. Each render pass samples each
 source once for the same player/event context. Native typed values use immutable
 snapshots and dependency revisions. Explicit dependency declarations let native
 HUD definitions reuse rendered output until an input changes. Animated or
-legacy polling definitions continue ticking. Never infer that a arbitrary
+legacy polling definitions continue ticking. Never infer that an arbitrary
 third-party placeholder is static.
 
 Final immutable component/color equality is checked before compacting and
-transport conversion. Cache state is committed only after a successful send,
-and invalidated on reload/removal. Force-update remains an escape hatch.
+transport conversion. Cache state advances when the transport accepts an update; synchronous enqueue
+failures invalidate it, as do reload/removal. Connection failures are asynchronous
+and require reconnect validation. Force-update remains an escape hatch.
 External bossbar changes still drive additionalComponent updates.
 
 Keep per-player ticking initially; batch only after profiling demonstrates a
@@ -67,3 +68,37 @@ own their state and integrations; Glyph contains no RPG-specific behavior.
 All project packages migrate to `online.libang.glyph`. This deliberately breaks
 BetterHud binary plugin linkage; retain configuration syntax and document the
 required recompile. No NMS types enter the public typed-state API.
+
+## Modern extensions
+
+`LayoutGroup` compiles ordered children once. Absolute positioning remains the
+default. Rows use measured pixel widths, gaps, padding and justification; column
+Y positions and stack padding are baked into font ascents at pack build time.
+Columns retain reserved cell heights when children hide. Runtime vertical text
+reflow beyond these compiled bounds would require another glyph/font variant.
+
+Dynamic image patterns compile a fixed candidate table into HUD and popup fonts.
+Directory declarations load a library with one configuration entry. Missing
+identifiers use a configured fallback with bounded diagnostics. Nine-slice assets
+are resized at pack time, with up to 128 named size variants per declaration;
+selecting a variant changes the measured width used by rows.
+
+`glyph-transport-paper` owns the named NMS boss-event codec, Netty interceptor and
+per-field sent state. The version adapters only obtain the connection and provide
+unrelated version-specific services. Velocity has its own named packet adapter
+and immutable partial-update state. Both track complete external bars in insertion
+order, promote them between reserved/overflow slots, acknowledge consumed writes,
+restore originals when removed, and resize reserved lines after configuration
+reload. Paper/Velocity connection lifecycle and restoration still need live tests.
+
+Paper resource requests retain other packs and use a stable Glyph pack identity,
+so changing a hash updates Glyph's entry rather than accumulating it. Keep shared
+shaders/fonts in one compiler: pack stacking alone cannot resolve those collisions.
+CraftEngine handoff checks active overlay assets against its declared resource
+folders and external packs, replaces prior registered output on successful reload,
+and rejects conflicting registration. Assets generated later inside CraftEngine
+are outside that event's exposed cache API and need final-pack/client verification.
+
+The existing glyph/font renderer remains the current backend. Future official
+3D/depth rendering can use a separate backend behind the transport boundary;
+there is no speculative 3D NMS implementation.
