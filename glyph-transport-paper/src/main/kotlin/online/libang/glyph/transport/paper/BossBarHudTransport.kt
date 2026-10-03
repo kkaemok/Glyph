@@ -2,6 +2,7 @@ package online.libang.glyph.transport.paper
 
 import io.netty.channel.Channel
 import online.libang.glyph.api.GlyphAPI
+import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.transport.BossBarStateTracker
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
@@ -62,7 +63,7 @@ class BossBarHudTransport(
             hud.color = BossBarPacketCodec.color(color)
             val external = additionalId?.let { tracker[it] }
             publish(external?.let { BossBarPacketCodec.copy(hudId, it).apply { name = hud.name } } ?: hud,
-                forceName = GlyphAPI.inst().configManager.isForceUpdate)
+                forceName = ConfigManagerImpl.forceUpdate)
         }
     }
 
