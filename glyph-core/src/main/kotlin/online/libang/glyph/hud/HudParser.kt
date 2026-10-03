@@ -28,11 +28,11 @@ class HudParser(
         HudHeadParser(hud, image, gui, pixel)
     }
 
-    private val elements = listOf(
+    private val elements = layout.order(
         imageElement,
         textElement,
         headElement
-    ).flatten()
+    )
 
     val conditions = layout.conditions build UpdateEvent.EMPTY
 
@@ -48,7 +48,7 @@ class HudParser(
         val render = {
             if (conditions(player)) {
                 val f = player.tick
-                LayoutComponentContainer(layout.offset, layout.align, max)
+                LayoutComponentContainer(layout.offset, layout.align, max, layout.flow)
                     .append(renderer.map {
                         it(f)
                     })

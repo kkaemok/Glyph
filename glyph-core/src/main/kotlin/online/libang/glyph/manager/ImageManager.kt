@@ -44,6 +44,38 @@ object ImageManager : GlyphManager {
         val map = HashMap<String, ImageElement>()
         workingDirectory.subFolder("images").forEachAllYaml(info.sender) { file, s, yamlObject ->
             runCatching {
+                if (yamlObject.getAsString("type", "").equals("nine_slice", true) && yamlObject["sizes"] != null) {
+                    val sizes = yamlObject["sizes"]!!.asObject().toList()
+                    require(sizes.isNotEmpty() && sizes.size <= 128) { "nine-slice sizes must contain 1..128 variants" }
+                    for ((size, definition) in sizes) {
+                        val id = "$s/$size"
+                        val variant = yamlObject.get().toMutableMap().apply {
+                            remove("sizes")
+                            putAll(definition.asObject().get())
+                        }
+                        val image = ImageType.NINE_SLICE.createElement(assets, info.sender, file, id,
+                            online.libang.glyph.yaml.YamlObjectImpl("$s.sizes.$size", variant))
+                        require(map.putIfAbsent(id, image) == null) { "Duplicate image: $id" }
+                    }
+                    return@runCatching
+                }
+                if (yamlObject.getAsString("type", "").equals("directory", true)) {
+                    val root = assets.toPath().toAbsolutePath().normalize()
+                    val folder = root.resolve(yamlObject["directory"]?.asString().ifNull { "directory value not set" }).normalize()
+                    require(folder.startsWith(root) && java.nio.file.Files.isDirectory(folder)) { "Image directory must exist inside assets" }
+                    java.nio.file.Files.walk(folder).use { paths ->
+                        paths.filter { java.nio.file.Files.isRegularFile(it) && it.toString().endsWith(".png", true) }.sorted().forEach { path ->
+                            require(path.toRealPath().startsWith(root.toRealPath())) { "Image directory symlink escapes assets: $path" }
+                            val suffix = folder.relativize(path).toString().replace('\\', '/').removeSuffix(".png")
+                            val id = "$s/$suffix"
+                            require(!map.containsKey(id)) { "Duplicate image: $id" }
+                            map[id] = ImageElement(id, listOf(path.toFile().toImage().removeEmptySide()
+                                .ifNull { "Empty directory image: $path" }.toNamed("${id.replace('/', '_')}.png")),
+                                ImageType.SINGLE, yamlObject["setting"]?.asObject() ?: ImageType.emptySetting)
+                        }
+                    }
+                    return@runCatching
+                }
                 val image = ImageType.valueOf(
                     yamlObject["type"]?.asString().ifNull { "type value not set." }.uppercase()
                 ).createElement(assets, info.sender, file, s, yamlObject)

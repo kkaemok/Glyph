@@ -93,7 +93,7 @@ class PopupLayout(
                 }
                 Runner {
                     val frame = frameSupplier()
-                    LayoutComponentContainer(layout.offset, layout.align, max)
+                    LayoutComponentContainer(layout.offset, layout.align, max, layout.flow)
                         .append(result.map {
                             it(frame)
                         })
@@ -156,7 +156,8 @@ class PopupLayout(
                     target.source.toComponent()
                 } catch (_: StackOverflowError) {
                     throw RuntimeException("circular reference found in ${target.source.id}")
-                }
+                },
+                target.candidates.mapValues { it.value.toComponent() }
             )
         }
 
@@ -325,10 +326,10 @@ class PopupLayout(
             )
         }
 
-        private val renderers: List<HudRenderer> = listOf(
+        private val renderers: List<HudRenderer> = layout.order(
             image,
             texts,
             heads
-        ).flatten()
+        )
     }
 }

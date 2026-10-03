@@ -21,6 +21,8 @@ interface ImageLayout : HudLayout<ImageElement> {
     val maxStack: PlaceholderBuilder<*>?
     val reversed: Boolean
     val clearListener: Boolean
+    val dynamicSource: String?
+    val candidates: Map<String, ImageElement>
 
     fun identifier(shader: HudShader, ascent: Int, fileName: String): HudLayout.Identifier {
         return ImageIdentifier(
@@ -63,7 +65,7 @@ interface ImageLayout : HudLayout<ImageElement> {
             yamlObject: YamlObject,
             loc: PixelLocation,
         ): this(
-            yamlObject["name"]?.asString().ifNull { "name value not set: $s" }.let { n ->
+            (yamlObject["name"] ?: yamlObject["fallback"])?.asString().ifNull { "name or fallback value not set: $s" }.let { n ->
                 ImageManager.getImage(n).ifNull { "this image doesn't exist: $n" }
             },
             group,
@@ -71,6 +73,13 @@ interface ImageLayout : HudLayout<ImageElement> {
             loc
         )
         override val color: TextColor = yamlObject["color"]?.asString()?.toTextColor() ?: NamedTextColor.WHITE
+        override val dynamicSource: String? = yamlObject["source"]?.asString()
+        override val candidates: Map<String, ImageElement> = dynamicSource?.let { pattern ->
+            val prefix = pattern.substringBefore('[')
+            val names = yamlObject["candidates"]?.asArray()?.map { it.asString() }
+            (names?.map { name -> ImageManager.getImage(name).ifNull { "Dynamic image doesn't exist: $name" } }
+                ?: ImageManager.allImage.filter { it.id.startsWith(prefix) }).associateBy { it.id }
+        } ?: emptyMap()
         override val scale: Double = yamlObject.getAsDouble("scale", 1.0)
         override val space: Int = yamlObject.getAsInt("space", 1)
         override val stack: PlaceholderBuilder<*>? = yamlObject["stack"]?.asString()?.let {

@@ -56,6 +56,25 @@ enum class ImageType {
         }
 
     },
+    NINE_SLICE {
+        override fun getComponent(listener: HudListener, frame: Long, component: ImageComponent, player: HudPlayer) =
+            SINGLE.getComponent(listener, frame, component, player)
+
+        override fun createElement(assets: File, sender: BetterCommandSource, file: File, s: String, yamlObject: YamlObject): ImageElement {
+            val name = yamlObject["file"]?.asString().ifNull { "nine-slice file value not set" }
+            val source = File(assets, name).toImage()
+            val border = yamlObject["border"]?.asObject().ifNull { "nine-slice border value not set" }
+            val insets = online.libang.glyph.image.NineSlice.Insets(
+                border.getAsInt("left", 0), border.getAsInt("top", 0), border.getAsInt("right", 0), border.getAsInt("bottom", 0))
+            val width = yamlObject.getAsInt("width", source.width)
+            val height = yamlObject.getAsInt("height", source.height)
+            val mode = online.libang.glyph.image.NineSlice.Mode.valueOf(yamlObject.getAsString("mode", "stretch").uppercase())
+            val image = online.libang.glyph.image.NineSlice.resize(source, width, height, insets, mode)
+            return ImageElement(s, listOf(online.libang.glyph.image.LoadedImage(image, 0, 0)
+                .toNamed("${s.replace('/', '_')}_${width}x${height}_${mode.name.lowercase()}.png")), this,
+                yamlObject["setting"]?.asObject() ?: emptySetting)
+        }
+    },
     LISTENER {
         override fun getComponent(listener: HudListener, frame: Long, component: ImageComponent, player: HudPlayer): PixelComponent {
             val get = listener.getValue(player).run {
