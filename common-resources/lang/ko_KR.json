@@ -49,7 +49,7 @@
     "betterhud.popup.show.message.error.2": "원인: [cause]",
     "betterhud.popup.show.message.failure": "[player]에게 이 팝업을 표시하지 못했습니다.",
     "betterhud.popup.show.message.success": "[player]에게 팝업이 성공적으로 표시되었습니다.",
-    "betterhud.reload.description": "BetterHud를 다시 불러옵니다.",
+    "betterhud.reload.description": "Glyph를 다시 불러옵니다.",
     "betterhud.reload.message.failure.1": "다시 불러오기에 실패했습니다.",
     "betterhud.reload.message.failure.2": "원인: [cause]",
     "betterhud.reload.message.on_reload": "플러그인이 아직 다시 불러오는 중입니다!",

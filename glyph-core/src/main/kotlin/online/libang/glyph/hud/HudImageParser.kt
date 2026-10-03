@@ -1,0 +1,85 @@
+package online.libang.glyph.hud
+
+import online.libang.glyph.api.component.PixelComponent
+import online.libang.glyph.api.component.WidthComponent
+import online.libang.glyph.api.player.HudPlayer
+import online.libang.glyph.api.update.UpdateEvent
+import online.libang.glyph.element.ImageElement
+import online.libang.glyph.image.ImageComponent
+import online.libang.glyph.location.PixelLocation
+import online.libang.glyph.layout.ImageLayout
+import online.libang.glyph.renderer.ImageRenderer
+import online.libang.glyph.location.GuiLocation
+import online.libang.glyph.shader.HudShader
+import online.libang.glyph.util.*
+import net.kyori.adventure.text.Component
+import kotlin.math.roundToInt
+
+class HudImageParser(parent: HudImpl, private val imageLayout: ImageLayout, gui: GuiLocation, pixel: PixelLocation) : HudSubParser {
+
+    private val chars = run {
+        val finalPixel = imageLayout.location + pixel
+
+        val shader = HudShader(
+            gui,
+            imageLayout.renderScale + pixel,
+            imageLayout.layer,
+            imageLayout.outline,
+            finalPixel.opacity,
+            imageLayout.property
+        )
+        val negativeSpace = parent.getOrCreateSpace(-1)
+        fun ImageElement.toComponent(parentComponent: ImageComponent? = null): ImageComponent {
+            val list = ArrayList<PixelComponent>()
+            if (listener != null) {
+                list.add(EMPTY_PIXEL_COMPONENT)
+            }
+            image.forEach { pair ->
+                val fileName = "$NAME_SPACE_ENCODED:${pair.name}"
+                val height = (pair.image.image.height.toDouble() * imageLayout.scale * scale).roundToInt()
+                val scale = height.toDouble() / pair.image.image.height
+                val ascent = finalPixel.y.coerceAtLeast(-HUD_ADD_HEIGHT).coerceAtMost(HUD_ADD_HEIGHT)
+                val component = image(imageLayout.identifier(shader, ascent, fileName)) {
+                    val c = parent.newChar
+                    val comp = Component.text()
+                        .font(parent.imageKey)
+                    val finalWidth = WidthComponent(
+                        comp.content("$c$negativeSpace"),
+                        (pair.image.image.width.toDouble() * scale).roundToInt()
+                    )
+                    parent.jsonArray?.let { array ->
+                        createAscent(shader, ascent) { y ->
+                            array += jsonObjectOf(
+                                "type" to "bitmap",
+                                "file" to fileName,
+                                "ascent" to y,
+                                "height" to height,
+                                "chars" to jsonArrayOf(c)
+                            )
+                        }
+                    }
+                    finalWidth
+                }
+
+                list.add(component.toPixelComponent(finalPixel.x + (pair.image.xOffset * scale).roundToInt()))
+            }
+            return ImageComponent(this, parentComponent, list, children.entries.associate {
+                it.key to it.value.toComponent()
+            })
+        }
+        val renderer = ImageRenderer(
+            imageLayout,
+            try {
+                imageLayout.source.toComponent()
+            } catch (_: StackOverflowError) {
+                throw RuntimeException("circular reference found in ${imageLayout.source.id}")
+            }
+        )
+        renderer.max() to renderer.render(UpdateEvent.EMPTY)
+    }
+
+    val max = chars.first
+
+    override fun render(player: HudPlayer): (Long) -> PixelComponent = chars.second(player)
+
+}

@@ -81,6 +81,7 @@ void main() {
         if (((bit >> MAX_BIT) & 1) == 1) {
 
             int id = bit - (1 << MAX_BIT);
+            if (id >= 1 && id <= LAYOUT_COUNT) {
 
             pos.x -= 0.5 * ui.x;
             pos.y -= (bit << HEIGHT_BIT) + ADD_OFFSET + DEFAULT_OFFSET;
@@ -135,6 +136,7 @@ void main() {
             pos.x += xGui;
             pos.y += yGui;
             pos.z += layer;
+            }
 
         }
     } else {

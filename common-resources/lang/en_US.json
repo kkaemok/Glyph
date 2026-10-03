@@ -49,7 +49,7 @@
  "betterhud.popup.show.message.error.2": "Cause: [cause]",
  "betterhud.popup.show.message.failure": "Failed to show this popup to [player].",
  "betterhud.popup.show.message.success": "Popup was successfully displayed to [player].",
- "betterhud.reload.description": "Reload BetterHud.",
+ "betterhud.reload.description": "Reload Glyph.",
  "betterhud.reload.message.failure.1": "Reload failed.",
  "betterhud.reload.message.failure.2": "Cause: [cause]",
  "betterhud.reload.message.on_reload": "The plugin is still reloading!",

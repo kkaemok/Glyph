@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:${property("minecraft_version")}-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:${property("minecraft_version")}.build.+")
     compileOnly("com.mojang:brigadier:1.3.10")
-    api(libs.bundles.adventure)
+    compileOnly(libs.bundles.adventure)
 }

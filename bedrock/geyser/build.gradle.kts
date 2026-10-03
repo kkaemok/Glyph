@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":api:bukkit-api"))
+    compileOnly(project(":glyph-paper-api"))
     compileOnly("org.geysermc.geyser:api:2.9.2-SNAPSHOT")
 }

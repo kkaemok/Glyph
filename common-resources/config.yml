@@ -2,17 +2,17 @@ debug: false
 auto-save-time: 300
 location-provide-time: 1
 debug-level: assets
-metrics: true
-version-check: true
+metrics: false
+version-check: false
 number-format: "#,###.#"
 tick-speed: 1
-namespace: "betterhud"
+namespace: "glyph"
 default-font-name: "font.ttf"
 bossbar-line: 1
 bossbar-resource-pack-line: 0
 merge-boss-bar: true
 disable-to-bedrock-player: true
-build-folder-location: "BetterHud/build"
+build-folder-location: "Glyph/build"
 pack-type: zip #folder, zip, none
 enable-protection: false
 enable-self-host: false

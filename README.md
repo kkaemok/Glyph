@@ -1,103 +1,39 @@
-<div align="center">  
+# Glyph
 
-![-0001-export](https://github.com/toxicity188/BetterHud/assets/114675706/ccbf4bd3-9133-44ee-b277-985eae4349ae)
+A high-performance HUD engine for Paper and Velocity, based on BetterHud.
 
-Welcome to BetterHud!
+Glyph is an independent downstream fork of [BetterHud dev](https://github.com/toxicity188/BetterHud/tree/dev), with full Git history and MIT attribution preserved. Initial targets: Paper 26.1.x, 26.2, 26.3, Java 25 and Velocity. This is a development fork; live-client rendering and production load validation are still required.
 
-[SpigotMC](https://www.spigotmc.org/resources/115559/) | [Hangar](https://hangar.papermc.io/toxicity188/BetterHud) | [Modrinth](https://modrinth.com/plugin/betterhud2) | [Github](https://github.com/toxicity188/BetterHud)
+## Build
 
-[![GitHub Release](https://img.shields.io/github/v/release/toxicity188/BetterHud?display_name=release&style=for-the-badge&logo=kotlin)](https://github.com/toxicity188/BetterHud/releases/latest)
-[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/rePyFESDbk)
-[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/toxicity188/BetterHud?style=for-the-badge&logo=github)](https://github.com/toxicity188/BetterHud/issues)
-[![Static Badge](https://img.shields.io/badge/WIKI-blue?style=for-the-badge)](https://github.com/toxicity188/BetterHud/wiki)
-[![CodeFactor](https://www.codefactor.io/repository/github/toxicity188/betterhud/badge/master?style=for-the-badge)](https://www.codefactor.io/repository/github/toxicity188/betterhud/overview/master)
+Open this directory as a Gradle project in IntelliJ IDEA and select a Java 25 Gradle JVM. Run `gradlew.bat build` on Windows or `./gradlew build` elsewhere. The wrapper supplies Gradle; any compatible Java 25 vendor works.
 
-</div>
+Paper and Velocity distributions are written to `build/libs`. `pluginJar` and `velocityJar` build individual distributions. `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
 
-### Multiplatform server-side HUD implementation of Minecraft
-This project implements a server-side HUD.
+Fabric and Minecraft 1.21 implementations are intentionally removed. Private libraries are bundled at build time. Glyph does not inject URLs into server classloaders, publish to BetterHud registries or report to BetterHud metrics IDs.
 
-- Supports auto-generating resource pack.
-- Supports display image(include png sequence), text, head.
-- Supports animation.
+## Native state
 
-### Platform
-- Bukkit(with Folia) 1.21–26.1.x
-- Velocity 3.3-3.5
-- Fabric server 26.1.x
+Use `GlyphAPI.inst().playerManager.getHudPlayer(uuid)` to obtain a HUD player. Its `hudState` accepts immutable `HudValue.Number`, `Boolean`, `Text`, `RichText` and `Identifier` values. `setAll` publishes related values atomically.
 
-### Library
-- [kotlin stdlib](https://github.com/JetBrains/kotlin): Implements better functional programming.
-- [adventure](https://github.com/KyoriPowered/adventure): Implements multi-platform component.
-- [bstats](https://bstats.org/getting-started/include-metrics): Implements metrics.
-- [exp4j](https://github.com/fasseg/exp4j): Implements equation.
-- [snakeyaml](https://github.com/snakeyaml/snakeyaml): Implements yaml parser.
-- [gson](https://github.com/google/gson): Implements json parser/writer.
-- [better command](https://github.com/toxicity188/BetterCommand): Implements multi-platform supporting command.
-- [expiring map](https://github.com/jhalterman/expiringmap): Implements cache map.
-- [HikariCP](https://github.com/brettwooldridge/HikariCP): Implements comfortable DB handling.
-- [mysql-connector-j](https://github.com/mysql/mysql-connector-j): Implements MySQL connector.
-- [semver4j](https://github.com/semver4j/semver4j): Implements semver parser and comparator. 
+Patterns support `[state_number:health]`, `[state_boolean:alive]` and `[state:name]`. Text is escaped as literal MiniMessage content; RichText preserves an Adventure component. Existing placeholders remain supported and each source is sampled once per player/event during a render frame.
 
+A layout can declare `dependencies: [health, alive]` to cache its rendered segment until those native inputs change. Declare **all** changing inputs. Leave this absent for legacy polling placeholders, player-following content and animations. An empty list declares a static layout. Force-update bypasses the cache. Unchanged final HUD output skips compaction, conversion and packets even with legacy polling.
 
-### Dependency
-- Bukkit: No
-- Velocity: No
-- Fabric server: [Fabric API](https://modrinth.com/mod/fabric-api)
+## Screen effects
 
-### Build
-Requires Java 25 Eclipse Adoptium.
+On Paper 26.3, call `GlyphAPI.inst().postEffects(player)` on the player's owning thread. Use `add`, `remove`, `clear`, `set` and `values`. Check `supported()` on older platforms. Effects must exist in the client's pack; Glyph uses Paper's API without executing commands.
 
-- Build all available jar: ./gradlew build  
-- Build Bukkit plugin: ./gradlew pluginJar
-- Build Velocity plugin: ./gradlew velocityJar
-- Build Fabric server side mod: ./gradlew fabricJar  
-- Build source code jar: ./gradlew sourcesJar  
-- Build dokka-based docs jar: ./gradlew javadocJar
+Conflicting pack assets, including `minecraft:end_of_frame`, require explicit resolution rather than silent overwrite.
 
-### API
-[Bukkit example plugin](https://github.com/toxicity188/BetterHud-MMOCore)  
-![Maven Central Version](https://img.shields.io/maven-central/v/io.github.toxicity188/BetterHud-bukkit-api) (BetterHud for Bukkit)
-``` kotlin
-repositories {
-    mavenCentral()
-}
+## Documentation
 
-dependencies {
-    compileOnly("io.github.toxicity188:BetterHud-bukkit-api:VERSION") //Bukkit api
-}
-```
+- [Upstream review and sync policy](GLYPH_UPSTREAM_NOTES.md)
+- [Architecture](GLYPH_ARCHITECTURE.md)
+- [Validation and profiling](GLYPH_PERFORMANCE.md)
+- [Migration from BetterHud](GLYPH_MIGRATION.md)
+- [Original requirements](GLYPH_REQUIREMENTS.md)
 
-[Fabric example mod](https://github.com/toxicity188/betterhud-fabric-example)  
-![Maven Central Version](https://img.shields.io/maven-central/v/io.github.toxicity188/BetterHud-mod-api) (BetterHud for Fabric)
-``` kotlin
-repositories {
-    mavenCentral()
-}
+## Attribution
 
-dependencies {
-    compileOnly("io.github.toxicity188:BetterHud-mod-api:VERSION") //Platform api
-}
-```
-
-### Use BetterHud with Skript
-[Go to download Skript](https://github.com/SkriptLang/Skript/releases)
-```
-command /pointadd:
-    trigger:
-        #compass marker add
-        point add location at 0, 0, 0 in world "world" named "test1" to player
-        point add location at 10, 0, 0 in world "world" named "test2" with icon "other" to player
-
-command /pointremove:
-    trigger:
-        #compass marker remove
-        point remove "test1" to player
-        point remove "test2" to player
-
-command /popup:
-    trigger:
-        #show popup with custom event
-        set {_o::rand} to random integer between 1 to 100
-        show popup "test_popup" to player with variable of {_o::*}
-```
+BetterHud was created by toxicity188 and its contributors. Glyph retains and extends their renderer, layouts, packs, head cache, integrations, popup/compass behavior and bossbar interception. See [LICENSE](LICENSE) and upstream history.

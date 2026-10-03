@@ -49,7 +49,7 @@
     "betterhud.popup.show.message.error.2": "Lý do: [cause]",
     "betterhud.popup.show.message.failure": "Không thể hiển thị cửa sổ bật lên này cho [player].",
     "betterhud.popup.show.message.success": "Đã hiển thị cửa sổ bật lên cho [player] thành công.",
-    "betterhud.reload.description": "Tải lại BetterHud.",
+    "betterhud.reload.description": "Tải lại Glyph.",
     "betterhud.reload.message.failure.1": "Tải lại thất bại.",
     "betterhud.reload.message.failure.2": "Lý do: [cause]",
     "betterhud.reload.message.on_reload": "Plugin vẫn đang được tải lại!",

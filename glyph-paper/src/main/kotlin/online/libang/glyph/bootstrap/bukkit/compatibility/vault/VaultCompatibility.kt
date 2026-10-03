@@ -1,0 +1,38 @@
+package online.libang.glyph.bootstrap.bukkit.compatibility.vault
+
+import online.libang.glyph.api.listener.HudListener
+import online.libang.glyph.api.placeholder.HudPlaceholder
+import online.libang.glyph.api.trigger.HudTrigger
+import online.libang.glyph.api.update.UpdateEvent
+import online.libang.glyph.api.yaml.YamlObject
+import online.libang.glyph.bootstrap.bukkit.compatibility.Compatibility
+import online.libang.glyph.bootstrap.bukkit.util.bukkitPlayer
+import net.milkbowl.vault.economy.Economy
+import org.bukkit.Bukkit
+import java.util.function.Function
+
+class VaultCompatibility : Compatibility {
+
+    override val website: String = "https://www.spigotmc.org/resources/34315/"
+
+    private val money = runCatching {
+        Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+    }.getOrNull()
+
+    override val triggers: Map<String, (YamlObject) -> HudTrigger<*>>
+        get() = mapOf()
+    override val listeners: Map<String, (YamlObject) -> (UpdateEvent) -> HudListener>
+        get() = emptyMap()
+    override val numbers: Map<String, HudPlaceholder<Number>>
+        get() = mapOf(
+            "money" to HudPlaceholder.of { _, _ ->
+                Function { p ->
+                    money?.getBalance(p.bukkitPlayer) ?: 0.0
+                }
+            }
+        )
+    override val strings: Map<String, HudPlaceholder<String>>
+        get() = emptyMap()
+    override val booleans: Map<String, HudPlaceholder<Boolean>>
+        get() = emptyMap()
+}

@@ -1,0 +1,30 @@
+package online.libang.glyph.configuration
+
+import online.libang.glyph.api.yaml.YamlObject
+import online.libang.glyph.util.BOOTSTRAP
+import online.libang.glyph.util.DATA_FOLDER
+import online.libang.glyph.util.ifNull
+import online.libang.glyph.util.toYaml
+import java.io.File
+
+enum class PluginConfiguration(
+    private val dir: String
+) {
+    CONFIG("config.yml"),
+    DATABASE("database.yml"),
+    FONT("font.yml"),
+    SHADER("shader.yml")
+    ;
+
+    fun create(): YamlObject {
+        val file = File(DATA_FOLDER, dir)
+        val exists = file.exists()
+        if (!exists) file.createNewFile()
+        val yaml = file.toYaml()
+        val newYaml = BOOTSTRAP.resource(dir)?.toYaml().ifNull { "Resource '$dir' not found." }
+        yaml.merge(newYaml)
+        return yaml.apply {
+            save(file)
+        }
+    }
+}

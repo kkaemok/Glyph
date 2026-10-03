@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":api"))
-    compileOnly(project(":api:bukkit-api"))
+    compileOnly(project(":glyph-api"))
+    compileOnly(project(":glyph-paper-api"))
 }

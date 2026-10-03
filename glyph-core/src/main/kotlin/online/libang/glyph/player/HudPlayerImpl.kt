@@ -1,0 +1,196 @@
+package online.libang.glyph.player
+
+import kr.toxicity.command.SenderType
+import online.libang.glyph.api.component.WidthComponent
+import online.libang.glyph.api.configuration.HudComponentSupplier
+import online.libang.glyph.api.configuration.HudObject
+import online.libang.glyph.api.configuration.HudObjectType
+import online.libang.glyph.api.player.HudPlayer
+import online.libang.glyph.api.player.HudPlayerHead
+import online.libang.glyph.api.player.PointedLocation
+import online.libang.glyph.api.popup.PopupIteratorGroup
+import online.libang.glyph.api.popup.PopupUpdater
+import online.libang.glyph.manager.*
+import online.libang.glyph.util.*
+import net.kyori.adventure.bossbar.BossBar
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.forEach
+
+abstract class HudPlayerImpl : HudPlayer {
+    private val state = online.libang.glyph.api.state.HudState()
+    final override fun getHudState() = state
+    private val locationSet = HashSet<PointedLocation>()
+    private val componentMap = ConcurrentHashMap<HudObject.Identifier, HudComponentSupplier<*>>()
+    private val renderCache = HudRenderCache()
+
+    private var tick = 0L
+    private var last: WidthComponent = EMPTY_WIDTH_COMPONENT
+    private var additionalComp: WidthComponent? = null
+    private val variable = ConcurrentHashMap<String, String>()
+    private val popupGroup = ConcurrentHashMap<String, PopupIteratorGroup>()
+    private val popupKey = ConcurrentHashMap<Any, PopupUpdater>()
+    private var color: BossBar.Color? = null
+    private var enabled = true
+    private val pointers: MutableSet<PointedLocation> = OverridableSet(keyMapper = {
+        it.name
+    })
+
+    private val task = HudPlayerTask {
+        val speed = ConfigManagerImpl.tickSpeed
+        if (speed > 0) scheduleUpdate(speed) else null
+    }
+    private val autoSave = HudPlayerTask {
+        asyncTaskTimer(1 + Math.floorMod(uuid().leastSignificantBits, ConfigManagerImpl.autoSaveTime.coerceAtLeast(1)), ConfigManagerImpl.autoSaveTime.coerceAtLeast(1)) {
+            save()
+        }
+    }
+    private val locationProvide = HudPlayerTask {
+        asyncTaskTimer(ConfigManagerImpl.locationProvideTime, ConfigManagerImpl.locationProvideTime) {
+            PlayerManagerImpl.provideLocation(this)
+        }
+    }
+
+    protected fun inject() {
+        HudObjectType.types().forEach { type ->
+            type.defaultObjects().forEach { it.add(this) }
+        }
+        VOLATILE_CODE.inject(this, ShaderManagerImpl.barColor)
+    }
+
+    final override fun getHudComponent(): WidthComponent = last
+    final override fun getAdditionalComponent(): WidthComponent? = additionalComp
+    final override fun setAdditionalComponent(component: WidthComponent?) {
+        additionalComp = component
+    }
+
+    final override fun getHudObjects(): MutableMap<HudObject.Identifier, HudComponentSupplier<*>> = componentMap
+
+    final override fun getBarColor(): BossBar.Color? = color
+    final override fun setBarColor(color: BossBar.Color?) {
+        this.color = color
+    }
+
+    final override fun getPointedLocation(): MutableSet<PointedLocation> = locationSet
+
+    final override fun cancelTick() {
+        task.cancel()
+    }
+
+    final override fun startTick() {
+        task.restart()
+    }
+
+    final override fun getPopupGroupIteratorMap(): MutableMap<String, PopupIteratorGroup> = popupGroup
+    final override fun getPopupKeyMap(): MutableMap<Any, PopupUpdater> = popupKey
+
+    final override fun getTick(): Long = tick
+    final override fun getVariableMap(): MutableMap<String, String> = variable
+    final override fun getHead(): HudPlayerHead = PlayerHeadManager.provideHead(name())
+    final override fun isHudEnabled(): Boolean = enabled
+    final override fun setHudEnabled(toEnable: Boolean) {
+        enabled = toEnable
+    }
+
+    final override fun save() {
+        val current = DatabaseManagerImpl.currentDatabase
+        if (!current.isClosed) current.save(this)
+    }
+
+    protected open fun scheduleUpdate(period: Long): online.libang.glyph.api.scheduler.HudTask =
+        asyncTaskTimer(1, period) { update() }
+
+    protected abstract fun updatePlaceholder()
+
+    @Synchronized
+    final override fun update() {
+        online.libang.glyph.renderer.RenderFrame.render { renderUpdate() }
+    }
+
+    private fun renderUpdate() {
+        updatePlaceholder()
+        tick++
+        val compList = ArrayList<WidthComponent>()
+
+        if (enabled && !PLUGIN.isOnReload) {
+            componentMap.entries.removeIf { (k, v) ->
+                runCatching {
+                    compList.addAll(v.get())
+                    false
+                }.handleFailure {
+                    "Unable to update ${k}."
+                }.getOrDefault(true)
+            }
+            val popupGroupIterator = popupGroup.values.iterator()
+            while (popupGroupIterator.hasNext()) {
+                val next = popupGroupIterator.next()
+                if (next.index == 0) {
+                    popupGroupIterator.remove()
+                    continue
+                }
+                val comp = next.next()
+                if (comp.isEmpty()) {
+                    popupGroupIterator.remove()
+                } else compList += comp
+            }
+        }
+        val component = if (compList.isNotEmpty() || additionalComp != null) {
+            additionalComp?.let {
+                compList += (-it.width / 2).toSpaceComponent() + it
+            }
+            var comp = NEGATIVE_ONE_SPACE_COMPONENT
+            compList.forEach {
+                comp += it
+                comp += (-it.width).toSpaceComponent()
+            }
+            last = comp.finalizeFont()
+            comp.component.build()
+        } else {
+            last = EMPTY_WIDTH_COMPONENT
+            EMPTY_COMPONENT
+        }
+        val barColor = color ?: ShaderManagerImpl.barColor
+        if (renderCache.shouldUpdate(component, barColor, ConfigManagerImpl.forceUpdate)) {
+            try {
+                VOLATILE_CODE.showBossBar(this, barColor, component.compact())
+            } catch (failure: Throwable) {
+                renderCache.invalidate()
+                throw failure
+            }
+        }
+    }
+
+    override fun reload() {
+        renderCache.invalidate()
+        autoSave.restart()
+        locationProvide.restart()
+        startTick()
+        val popupNames = popups.toNonDefaultNames()
+        val hudNames = huds.toNonDefaultNames()
+        val compassNames = compasses.toNonDefaultNames()
+        popupKey.clear()
+        componentMap.clear()
+        popupGroup.clear()
+
+        HudObjectType.types().forEach { type ->
+            type.defaultObjects().forEach { it.add(this) }
+        }
+        hudNames.toNonDefaultHud().forEach { it.add(this) }
+        popupNames.toNonDefaultPopup().forEach { it.add(this) }
+        compassNames.toNonDefaultCompass().forEach { it.add(this) }
+    }
+
+    final override fun cancel() {
+        renderCache.invalidate()
+        popupGroup.forEach {
+            it.value.clear()
+        }
+        VOLATILE_CODE.removeBossBar(this)
+        cancelTick()
+        autoSave.cancel()
+        locationProvide.cancel()
+    }
+
+    override fun type(): SenderType = SenderType.PLAYER
+
+    override fun pointers(): MutableSet<PointedLocation> = pointers
+}

@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":api"))
+    compileOnly(project(":glyph-api"))
     compileOnly("io.papermc.paper:paper-api:${property("minecraft_version")}.build.+")
 }

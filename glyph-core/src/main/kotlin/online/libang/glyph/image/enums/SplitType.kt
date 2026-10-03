@@ -1,0 +1,105 @@
+package online.libang.glyph.image.enums
+
+import online.libang.glyph.image.LoadedImage
+import online.libang.glyph.image.NamedLoadedImage
+import online.libang.glyph.util.circleCut
+import online.libang.glyph.util.removeEmptyWidth
+import java.awt.AlphaComposite
+import java.awt.image.BufferedImage
+import kotlin.math.PI
+
+enum class SplitType {
+    LEFT {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    LoadedImage(
+                        target.image.image.getSubimage(0, 0, (it.toDouble() / split * target.image.image.width).toInt().coerceAtLeast(1), target.image.image.height),
+                        target.image.xOffset,
+                        target.image.yOffset
+                    )
+                )
+            }
+        }
+    },
+    RIGHT {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                val getWidth = (it.toDouble() / split * target.image.image.width).toInt().coerceAtLeast(1)
+                val xOffset = target.image.image.width - getWidth
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    LoadedImage(
+                        target.image.image.getSubimage(xOffset, 0, getWidth, target.image.image.height),
+                        xOffset + target.image.xOffset,
+                        target.image.yOffset
+                    )
+                )
+            }
+        }
+    },
+    UP {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                val getHeight = (it.toDouble() / split * target.image.image.height).toInt().coerceAtLeast(1)
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    BufferedImage(target.image.image.width, target.image.image.height, BufferedImage.TYPE_INT_ARGB).apply {
+                        createGraphics().run {
+                            composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER)
+                            drawImage(target.image.image.getSubimage(0, target.image.image.height - getHeight, target.image.image.width, getHeight), 0, target.image.image.height - getHeight, null)
+                            dispose()
+                        }
+                    }.removeEmptyWidth(target.image.xOffset, target.image.yOffset) ?: throw RuntimeException()
+                )
+            }
+        }
+    },
+    DOWN {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    BufferedImage(target.image.image.width, target.image.image.height, BufferedImage.TYPE_INT_ARGB).apply {
+                        createGraphics().run {
+                            composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER)
+                            drawImage(target.image.image.getSubimage(0, 0, target.image.image.width, (it.toDouble() / split * target.image.image.height).toInt().coerceAtLeast(1)), 0, 0, null)
+                            dispose()
+                        }
+                    }.removeEmptyWidth(target.image.xOffset, target.image.yOffset) ?: throw RuntimeException()
+                )
+            }
+        }
+    },
+    CIRCLE {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                val targetImage = target.image.circleCut(2 * PI * it.toDouble() / split.toDouble()) ?: throw RuntimeException()
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    targetImage
+                )
+            }
+        }
+    },
+    REVERSE_CIRCLE {
+        override fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage> {
+            val saveName = target.name.substringBefore('.')
+            return (1..split).map {
+                val targetImage = target.image.circleCut(2 * PI * it.toDouble() / split.toDouble(), true) ?: throw RuntimeException()
+                NamedLoadedImage(
+                    "${saveName}_$it.png",
+                    targetImage
+                )
+            }
+        }
+    },
+    ;
+    abstract fun split(target: NamedLoadedImage, split: Int): List<NamedLoadedImage>
+}

@@ -24,7 +24,7 @@ signing {
     useGpgCmd()
 }
 
-val archiveName = "betterhud-${project.name}"
+val archiveName = "glyph-${project.name}"
 
 tasks.jar {
     archiveBaseName = archiveName
@@ -33,16 +33,16 @@ tasks.jar {
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
-    coordinates("io.github.toxicity188", publishName, project.version as String)
+    coordinates("online.libang.glyph", publishName, project.version as String)
     configure(JavaLibrary(
         javadocJar = JavadocJar.Javadoc(),
         sourcesJar = SourcesJar.Sources(),
     ))
     pom {
         name = publishName
-        description = "A multi-platform server-side implementation of HUD in Minecraft, supporting Bukkit(with Folia), Velocity, and Fabric."
+        description = "A high-performance HUD engine for Paper and Velocity, based on BetterHud."
         inceptionYear = "2024"
-        url = "https://github.com/toxicity188/BetterHud/"
+        url = "https://github.com/toxicity188/Glyph/"
         licenses {
             license {
                 name = "MIT License"
@@ -57,9 +57,9 @@ mavenPublishing {
             }
         }
         scm {
-            url = "https://github.com/toxicity188/BetterHud/"
-            connection = "scm:git:git://github.com/toxicity188/BetterHud.git"
-            developerConnection = "scm:git:ssh://git@github.com/toxicity188/BetterHud.git"
+            url = "https://github.com/toxicity188/Glyph/"
+            connection = "scm:git:git://github.com/toxicity188/Glyph.git"
+            developerConnection = "scm:git:ssh://git@github.com/toxicity188/Glyph.git"
         }
     }
 }

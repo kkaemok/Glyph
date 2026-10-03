@@ -49,7 +49,7 @@
     "betterhud.popup.show.message.error.2": "原因：[cause]",
     "betterhud.popup.show.message.failure": "无法显示 [player] 的此弹出窗口。",
     "betterhud.popup.show.message.success": "[player] 的弹出窗口显示成功。",
-    "betterhud.reload.description": "重新加载 BetterHud。",
+    "betterhud.reload.description": "重新加载 Glyph。",
     "betterhud.reload.message.failure.1": "重新加载失败。",
     "betterhud.reload.message.failure.2": "原因：[cause]",
     "betterhud.reload.message.on_reload": "插件正在重新加载中！",

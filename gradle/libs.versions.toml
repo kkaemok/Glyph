@@ -3,13 +3,10 @@
 kotlin = "2.4.20"
 
 resourcefactory = "1.4.0"
-paperweight = "2.0.0-beta.23"
-minotaur = "2.10.0"
+paperweight = "2.0.0-beta.24"
 
 # library
-adventure = "4.26.1"
-adventure-platform-bukkit = "5.2.0"
-adventure-platform-mod = "7.2.0"
+adventure = "5.2.0"
 snakeyaml = "2.7"
 gson = "2.14.0"
 exp4j = "0.4.8"
@@ -21,22 +18,13 @@ hikariCP = "7.1.0"
 fastUtil = "8.5.19"
 
 # mod
-fabric-api = "0.160.7+26.3"
-fabric-loader = "0.19.5"
-fabric-language-kotlin = "1.14.1+kotlin.2.4.20"
-neoform = "26.3-1"
 
 [libraries]
-fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
-fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventure-text-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-text-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
-adventure-platform-bukkit = { group = "io.github.toxicity188", name = "adventure-platform-bukkit", version.ref = "adventure-platform-bukkit" }
-adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventure-platform-mod" }
 
 kotlinStdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 betterCommand = { group = "io.github.toxicity188", name = "BetterCommand", version.ref = "betterCommand" }
@@ -52,7 +40,6 @@ bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "b
 bstats-velocity = { group = "org.bstats", name = "bstats-velocity", version.ref = "bstats" }
 
 build-kotlin-jvm = { group = "org.jetbrains.kotlin.jvm", name = "org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
-build-minotaur = { group = "com.modrinth.minotaur", name = "com.modrinth.minotaur.gradle.plugin", version.ref = "minotaur"}
 build-resourcefactory = { module = "xyz.jpenilla:resource-factory", version.ref = "resourcefactory" }
 build-shadow = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.6.1"
 build-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:2.2.0"
@@ -67,18 +54,12 @@ conventions-velocity = { id = "velocity-conventions" }
 conventions-bootstrap = { id = "bootstrap-conventions" }
 conventions-paperweight = { id = "paperweight-conventions" }
 
-resourcefactory-fabric = { id = "xyz.jpenilla.resource-factory-fabric-convention" }
 resourcefactory-velocity = { id = "xyz.jpenilla.resource-factory-velocity-convention" }
 resourcefactory-bukkit = { id = "xyz.jpenilla.resource-factory-bukkit-convention" }
 
 shadow = { id = "com.gradleup.shadow" }
 
 [bundles]
-fabric = [
-    "fabric-api",
-    "fabric-language-kotlin",
-    "fabric-loader"
-]
 
 adventure = [
     "adventure-api",
