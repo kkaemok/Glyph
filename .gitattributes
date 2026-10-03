@@ -7,3 +7,20 @@
 *.fsh linguist-vendored=false
 *.vsh linguist-documentation=false
 *.fsh linguist-documentation=false
+
+* text=auto
+*.java text eol=lf
+*.kt text eol=lf
+*.kts text eol=lf
+*.md text eol=lf
+*.vsh text eol=lf
+*.fsh text eol=lf
+*.glsl text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.properties text eol=lf
+*.py text eol=lf
+*.ps1 text eol=lf
+*.bat text eol=crlf
+.gitattributes text eol=lf
+UPSTREAM_BASE text eol=lf
