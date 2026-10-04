@@ -131,10 +131,20 @@ when CraftEngine owns distribution. The async cache event validates Glyph agains
 declared CraftEngine resource folders and registered external packs, including
 active overlays. Later-generated CraftEngine assets still require final-pack QA.
 
+Ordinary PNG collisions are handled separately: equivalent decoded pixels can
+coexist, including the transparent bossbar sprites used by Glyph and CNP. For a
+different ordinary texture with one external owner, Glyph registers a copy at
+`plugins/Glyph/.cache/craftengine-registration.zip` without its duplicate texture
+or animation metadata. The external pack supplies that texture; Glyph's original
+output remains unchanged. Glyph logs the selected owner. Different core shaders,
+font definitions/bitmap dependencies, post effects and incompatible overlays
+still block registration. See [the collision audit](GLYPH_PACK_COMPATIBILITY.md).
+
 CustomNameplates and TAB retain their own namespaces/fonts. Test their bitmap
 fonts and offsets with Glyph using the matrix in GLYPH_PERFORMANCE.md. External
-bossbar text currently retains BetterHud's default-font width measurement; custom
-font bossbar names need particular live attention. Core shader overrides remain
+literal bossbar text retains the existing width estimate; custom-font titles use
+client-centered standalone slots as described in [the font audit](GLYPH_EXTERNAL_BOSSBARS.md).
+Core shader overrides remain
 version-sensitive even after offline compilation succeeds.
 
 `assets/minecraft/post_effect/end_of_frame.json` has one effective owner at each

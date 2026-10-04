@@ -44,6 +44,7 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 - [Migration from BetterHud](GLYPH_MIGRATION.md)
 - [Configuration extensions](GLYPH_CONFIGURATION.md)
 - [External bossbar font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md)
+- [CraftEngine texture ownership and strict pack conflicts](GLYPH_PACK_COMPATIBILITY.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution
