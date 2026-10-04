@@ -18,6 +18,17 @@ On 26.3 the final pack's `glyph_26_3` overlay must include format 97.1. An old
 the fixed jar and regenerate the distributor's pack so its content/hash changes;
 replacing the jar alone does not update an already downloaded merged pack.
 
+## External bossbar titles
+
+With `merge-boss-bar` enabled, ordinary literal titles retain the existing HUD
+merge behavior. Custom-font/private-use titles, including CustomNameplates HUDs,
+keep their full font tree in client-centered standalone bossbar slots. They may
+occupy existing dummy slots; a custom title at Glyph's HUD line needs an extra
+row. Glyph's `bossbar-line` stays reserved. No CNP config/resource changes are
+required by this fix, but a CNP layout which assumes a fixed bossbar row may
+appear lower. See [the font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md) for
+the width-estimation limits and regression coverage.
+
 ## Image libraries and selection
 
 An `images/icons.yml` declaration imports all PNGs under `assets/skills`:

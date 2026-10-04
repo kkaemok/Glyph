@@ -4,6 +4,8 @@ import io.netty.channel.Channel
 import online.libang.glyph.api.GlyphAPI
 import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.transport.BossBarStateTracker
+import online.libang.glyph.transport.BossBarSlotPlan
+import online.libang.glyph.transport.ExternalBossBarText
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.minecraft.network.protocol.game.ClientboundBossEventPacket
@@ -162,28 +164,30 @@ class BossBarHudTransport(
 
     private fun reconcile() {
         val states = tracker.entries()
-        val next = LinkedHashMap<UUID, UUID>()
-        for ((index, entry) in states.withIndex()) {
+        val plan = BossBarSlotPlan.allocate(states, dummyIds, hudId) {
+            ExternalBossBarText.canMerge(BossBarPacketCodec.adventure(it.name), GlyphAPI.inst().defaultKey)
+        }
+        val next = plan.assignments
+        for (entry in states) {
             val (id, state) = entry
-            val slot = if (index < dummyIds.size) dummyIds[index] else if (index == dummyIds.size) hudId else id
-            next[id] = slot
+            val slot = next.getValue(id)
             if (assignments[id] == id && slot != id) {
                 send(ClientboundBossEventPacket.createRemovePacket(id)); sent.remove(id)
             }
             val packetState = BossBarPacketCodec.copy(slot, state)
-            if (slot == hudId) packetState.name = hud.name
+            packetState.name = plan.title(id, state.name, hud.name)
             publish(packetState, slot == id && assignments[id] != id)
         }
         for (slot in dummyIds) if (slot !in next.values) {
             val empty = BossBarPacketCodec.event(slot, Component.empty(), color)
             publish(empty)
         }
-        val selected = states.getOrNull(dummyIds.size)
+        val selected = plan.merged?.let { id -> states.first { it.first == id } }
         if (!GlyphAPI.inst().isOnReload && (refreshAdditional || selected?.first != additionalId || selected?.second?.name != additionalName)) {
             additionalId = selected?.first
             additionalName = selected?.second?.name
             val hudPlayer = GlyphAPI.inst().playerManager.getHudPlayer(player.uniqueId)
-            hudPlayer?.additionalComponent = selected?.second?.name?.let { online.libang.glyph.transport.ExternalBossBarText.measure(hudPlayer, BossBarPacketCodec.adventure(it)) }
+            hudPlayer?.additionalComponent = selected?.second?.name?.let { ExternalBossBarText.measure(BossBarPacketCodec.adventure(it)) }
         }
         refreshAdditional = GlyphAPI.inst().isOnReload
         if (selected == null) {

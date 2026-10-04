@@ -14,7 +14,7 @@ jobs:
           java-version: '25'
           distribution: temurin
       - run: chmod +x gradlew
-      - run: ./gradlew :glyph-core:test build :glyph-paper-api:writeCompatibilityClasspath --stacktrace
+      - run: ./gradlew test build :glyph-paper-api:writeCompatibilityClasspath --stacktrace
       - run: python3 tools/api/verify_compatibility.py
       - uses: actions/upload-artifact@v6
         with:

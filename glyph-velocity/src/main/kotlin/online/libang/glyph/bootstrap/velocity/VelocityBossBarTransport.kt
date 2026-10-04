@@ -10,6 +10,7 @@ import io.netty.channel.ChannelPromise
 import online.libang.glyph.api.GlyphAPI
 import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.transport.BossBarStateTracker
+import online.libang.glyph.transport.BossBarSlotPlan
 import online.libang.glyph.transport.ExternalBossBarText
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
@@ -142,19 +143,21 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
     }
     private fun reconcile() {
         val states = tracker.entries()
-        val next = LinkedHashMap<UUID, UUID>()
-        states.forEachIndexed { index, (id, state) ->
-            val slot = if (index < dummyIds.size) dummyIds[index] else if (index == dummyIds.size) hudId else id
-            next[id] = slot
+        val plan = BossBarSlotPlan.allocate(states, dummyIds, hudId) {
+            ExternalBossBarText.canMerge(it.name, GlyphAPI.inst().defaultKey)
+        }
+        val next = plan.assignments
+        states.forEach { (id, state) ->
+            val slot = next.getValue(id)
             if (assignments[id] == id && slot != id) remove(id)
-            publish(slot, if (slot == hudId) state.copy(name = hud.name) else state, slot == id && assignments[id] != id)
+            publish(slot, state.copy(name = plan.title(id, state.name, hud.name)), slot == id && assignments[id] != id)
         }
         dummyIds.filter { it !in next.values }.forEach { publish(it, State(color = hud.color)) }
-        val chosen = states.getOrNull(dummyIds.size)
+        val chosen = plan.merged?.let { id -> states.first { it.first == id } }
         if (!GlyphAPI.inst().isOnReload && (refreshAdditional || chosen?.first != selected || chosen?.second?.name != selectedName)) {
             selected = chosen?.first; selectedName = chosen?.second?.name
             val hudPlayer = GlyphAPI.inst().playerManager.getHudPlayer(player.uniqueId)
-            hudPlayer?.additionalComponent = chosen?.second?.name?.let { ExternalBossBarText.measure(hudPlayer, it) }
+            hudPlayer?.additionalComponent = chosen?.second?.name?.let { ExternalBossBarText.measure(it) }
         }
         refreshAdditional = GlyphAPI.inst().isOnReload
         if (chosen == null) publish(hudId, hud)

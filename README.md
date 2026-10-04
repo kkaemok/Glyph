@@ -8,7 +8,7 @@ Glyph is an independent downstream fork of [BetterHud dev](https://github.com/to
 
 Open this directory as a Gradle project in IntelliJ IDEA and select a Java 25 Gradle JVM. Run `gradlew.bat build` on Windows or `./gradlew build` elsewhere. The wrapper supplies Gradle; any compatible Java 25 vendor works.
 
-Paper and Velocity distributions are written to `build/libs` (`Glyph-paper` and `Glyph-velocity`). `pluginJar` and `velocityJar` build individual distributions. `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
+Paper and Velocity distributions are written to `build/libs` (`Glyph-paper` and `Glyph-velocity`). `pluginJar` and `velocityJar` build individual distributions. `test build` runs the full regression suite and builds both distributions; `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
 
 Fabric and Minecraft 1.21 implementations are intentionally removed. Private libraries are bundled at build time. Glyph does not inject URLs into server classloaders, publish to BetterHud registries or report to BetterHud metrics IDs.
 
@@ -43,6 +43,7 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 - [Validation and profiling](GLYPH_PERFORMANCE.md)
 - [Migration from BetterHud](GLYPH_MIGRATION.md)
 - [Configuration extensions](GLYPH_CONFIGURATION.md)
+- [External bossbar font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution
