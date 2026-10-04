@@ -5,8 +5,8 @@ import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.util.LiteralUtils
 import ch.njol.util.Kleenean
-import online.libang.glyph.api.bukkit.event.CustomPopupEvent
-import online.libang.glyph.api.bukkit.update.BukkitEventUpdateEvent
+import kr.toxicity.hud.api.bukkit.event.CustomPopupEvent
+import kr.toxicity.hud.api.bukkit.update.BukkitEventUpdateEvent
 import online.libang.glyph.bootstrap.bukkit.util.call
 import online.libang.glyph.bootstrap.bukkit.util.toHud
 import online.libang.glyph.manager.PopupManagerImpl

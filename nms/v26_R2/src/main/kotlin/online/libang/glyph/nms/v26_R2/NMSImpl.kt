@@ -7,10 +7,10 @@ import kr.toxicity.command.BetterCommandSource
 import kr.toxicity.command.impl.CommandModule
 import online.libang.glyph.api.Glyph
 import online.libang.glyph.api.GlyphAPI
-import online.libang.glyph.api.bukkit.nms.NMS
-import online.libang.glyph.api.bukkit.nms.NMSVersion
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.bukkit.nms.NMS
+import kr.toxicity.hud.api.bukkit.nms.NMSVersion
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.player.HudPlayer
 import online.libang.glyph.nms.v26_R2.entity.CraftEntityView
 import online.libang.glyph.nms.v26_R2.entity.CraftLivingEntityView
 import online.libang.glyph.nms.v26_R2.entity.createAdaptedFieldGetter

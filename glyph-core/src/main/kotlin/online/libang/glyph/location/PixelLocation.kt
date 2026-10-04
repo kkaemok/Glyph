@@ -1,6 +1,6 @@
 package online.libang.glyph.location
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.manager.ConfigManagerImpl
 
 data class PixelLocation(val x: Int, val y: Int, val opacity: Double) : Comparable<PixelLocation> {

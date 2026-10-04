@@ -70,9 +70,16 @@ compileOnly. CustomNameplates and TAB stay independent plugins; pack diagnostics
 and scoped glyph/shader behavior support coexistence. External gameplay plugins
 own their state and integrations; Glyph contains no RPG-specific behavior.
 
-All project packages migrate to `online.libang.glyph`. This deliberately breaks
-BetterHud binary plugin linkage; retain configuration syntax and document the
-required recompile. No NMS types enter the public typed-state API.
+Implementation packages remain under `online.libang.glyph`. The inherited public
+contracts retain `kr.toxicity.hud.api` so existing BetterHud consumers link to the
+same live managers, players, callbacks, and Bukkit events. `Glyph` extends
+`BetterHud`; both singleton entrypoints share one instance. This avoids copying
+state or adding adapters to render and packet paths. Paper provides the BetterHud
+plugin dependency identity. New typed-state and effect capabilities retain Glyph's
+namespace; no NMS types enter the typed-state API. Gson is shared with the platform
+and BetterCommand retains its original names because they appear in inherited
+public method descriptors; private libraries remain relocated. API compatibility
+is checked against `UPSTREAM_BASE` in CI.
 
 ## Modern extensions
 

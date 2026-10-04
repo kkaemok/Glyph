@@ -1,6 +1,6 @@
 package online.libang.glyph.configuration
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.util.BOOTSTRAP
 import online.libang.glyph.util.DATA_FOLDER
 import online.libang.glyph.util.ifNull

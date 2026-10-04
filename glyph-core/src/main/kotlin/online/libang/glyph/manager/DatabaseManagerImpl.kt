@@ -2,13 +2,13 @@ package online.libang.glyph.manager
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import online.libang.glyph.api.configuration.HudObject
-import online.libang.glyph.api.database.HudDatabase
-import online.libang.glyph.api.database.HudDatabaseConnector
-import online.libang.glyph.api.manager.DatabaseManager
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.player.PointedLocation
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.configuration.HudObject
+import kr.toxicity.hud.api.database.HudDatabase
+import kr.toxicity.hud.api.database.HudDatabaseConnector
+import kr.toxicity.hud.api.manager.DatabaseManager
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.player.PointedLocation
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.configuration.PluginConfiguration
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.*

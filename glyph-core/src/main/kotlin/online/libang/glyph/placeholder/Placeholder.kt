@@ -1,6 +1,6 @@
 package online.libang.glyph.placeholder
 
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayer
 
 interface Placeholder<T : Any> : (HudPlayer) -> T {
     val clazz: Class<out T>

@@ -1,15 +1,15 @@
 package online.libang.glyph.player
 
 import kr.toxicity.command.SenderType
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.configuration.HudComponentSupplier
-import online.libang.glyph.api.configuration.HudObject
-import online.libang.glyph.api.configuration.HudObjectType
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.player.HudPlayerHead
-import online.libang.glyph.api.player.PointedLocation
-import online.libang.glyph.api.popup.PopupIteratorGroup
-import online.libang.glyph.api.popup.PopupUpdater
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.configuration.HudComponentSupplier
+import kr.toxicity.hud.api.configuration.HudObject
+import kr.toxicity.hud.api.configuration.HudObjectType
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayerHead
+import kr.toxicity.hud.api.player.PointedLocation
+import kr.toxicity.hud.api.popup.PopupIteratorGroup
+import kr.toxicity.hud.api.popup.PopupUpdater
 import online.libang.glyph.manager.*
 import online.libang.glyph.util.*
 import net.kyori.adventure.bossbar.BossBar
@@ -105,9 +105,9 @@ abstract class HudPlayerImpl : HudPlayer {
         if (!current.isClosed) current.save(this)
     }
 
-    protected open fun scheduleUpdate(period: Long): online.libang.glyph.api.scheduler.HudTask =
+    protected open fun scheduleUpdate(period: Long): kr.toxicity.hud.api.scheduler.HudTask =
         scheduleOwned(period) { update() }
-    protected open fun scheduleOwned(period: Long, action: () -> Unit): online.libang.glyph.api.scheduler.HudTask =
+    protected open fun scheduleOwned(period: Long, action: () -> Unit): kr.toxicity.hud.api.scheduler.HudTask =
         asyncTaskTimer(1, period, action)
 
     protected abstract fun updatePlaceholder()

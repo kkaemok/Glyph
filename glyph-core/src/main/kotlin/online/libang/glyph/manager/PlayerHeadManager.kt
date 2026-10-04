@@ -1,7 +1,7 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.player.HudPlayerHead
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.player.HudPlayerHead
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.element.HeadElement
 import online.libang.glyph.layout.HudLayout
 import online.libang.glyph.pack.PackGenerator

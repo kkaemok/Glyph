@@ -42,18 +42,19 @@ tasks {
         }
         dependencies {
             exclude(dependency("org.jetbrains:annotations:13.0"))
+            // Gson appears in BetterHud's public method descriptors; use the platform's shared types.
+            exclude(dependency("com.google.code.gson:gson:.*"))
         }
         fun prefix(pattern: String) {
             relocate(pattern, "$groupString.shaded.$pattern")
         }
         prefix("kotlin")
-        prefix("kr.toxicity.command.impl")
+        // Keep command API identities consistent with the original BetterHud contracts.
         prefix("org.bstats")
         prefix("net.objecthunter.exp4j")
         prefix("net.jodah.expiringmap")
         prefix("com.zaxxer.hikari")
         prefix("org.yaml.snakeyaml")
-        prefix("com.google.gson")
         prefix("it.unimi.dsi.fastutil")
         mergeServiceFiles()
     }

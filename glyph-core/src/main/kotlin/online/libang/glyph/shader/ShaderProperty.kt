@@ -1,6 +1,6 @@
 package online.libang.glyph.shader
 
-import online.libang.glyph.api.yaml.YamlArray
+import kr.toxicity.hud.api.yaml.YamlArray
 
 enum class ShaderProperty {
     WAVE,

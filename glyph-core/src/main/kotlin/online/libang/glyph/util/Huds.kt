@@ -1,8 +1,8 @@
 package online.libang.glyph.util
 
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.configuration.HudObject
-import online.libang.glyph.api.configuration.HudObjectType
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.configuration.HudObject
+import kr.toxicity.hud.api.configuration.HudObjectType
 import online.libang.glyph.layout.HudLayout
 import online.libang.glyph.manager.ImageManager
 import online.libang.glyph.manager.PlayerHeadManager

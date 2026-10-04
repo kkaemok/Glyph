@@ -1,6 +1,6 @@
 package online.libang.glyph.placeholder
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.yaml.YamlObjectImpl
 
 interface PlaceholderSource {

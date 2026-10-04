@@ -4,10 +4,10 @@ import ch.njol.skript.lang.Effect
 import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.util.Kleenean
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.adapter.WorldWrapper
-import online.libang.glyph.api.player.PointedLocation
-import online.libang.glyph.api.player.PointedLocationSource
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.player.PointedLocation
+import kr.toxicity.hud.api.player.PointedLocationSource
 import online.libang.glyph.manager.PlayerManagerImpl
 import org.bukkit.Location
 import org.bukkit.entity.Player

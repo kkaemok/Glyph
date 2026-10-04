@@ -1,6 +1,6 @@
 package online.libang.glyph.command
 
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayer
 import java.util.Collections
 
 class HudPlayerStack(

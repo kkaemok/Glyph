@@ -1,6 +1,6 @@
 package online.libang.glyph.layout
 
-import online.libang.glyph.api.component.WidthComponent
+import kr.toxicity.hud.api.component.WidthComponent
 
 //TODO replace it to proper background in the future.
 class BackgroundLayout(

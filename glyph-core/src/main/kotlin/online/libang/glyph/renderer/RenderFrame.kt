@@ -1,8 +1,8 @@
 package online.libang.glyph.renderer
 
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayer
 import online.libang.glyph.api.state.HudState
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
 import java.util.UUID
 
 internal object RenderFrame {

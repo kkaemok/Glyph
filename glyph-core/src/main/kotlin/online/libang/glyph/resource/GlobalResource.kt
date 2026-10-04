@@ -1,7 +1,7 @@
 package online.libang.glyph.resource
 
 import kr.toxicity.command.BetterCommandSource
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.pack.PackGenerator
 import online.libang.glyph.util.*

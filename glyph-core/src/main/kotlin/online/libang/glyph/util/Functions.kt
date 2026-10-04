@@ -1,8 +1,8 @@
 package online.libang.glyph.util
 
 import kr.toxicity.command.BetterCommandSource
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.version.MinecraftVersion
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.version.MinecraftVersion
 import online.libang.glyph.equation.TEquation
 import online.libang.glyph.layout.enums.LayoutAlign
 import online.libang.glyph.manager.ConfigManagerImpl

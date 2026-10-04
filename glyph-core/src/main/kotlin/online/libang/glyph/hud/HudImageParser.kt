@@ -1,9 +1,9 @@
 package online.libang.glyph.hud
 
-import online.libang.glyph.api.component.PixelComponent
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.component.PixelComponent
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.element.ImageElement
 import online.libang.glyph.image.ImageComponent
 import online.libang.glyph.location.PixelLocation

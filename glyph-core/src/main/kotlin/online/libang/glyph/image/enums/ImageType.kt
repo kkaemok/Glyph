@@ -1,10 +1,10 @@
 package online.libang.glyph.image.enums
 
 import kr.toxicity.command.BetterCommandSource
-import online.libang.glyph.api.component.PixelComponent
-import online.libang.glyph.api.listener.HudListener
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.component.PixelComponent
+import kr.toxicity.hud.api.listener.HudListener
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.element.ImageElement
 import online.libang.glyph.image.ImageComponent
 import online.libang.glyph.util.*

@@ -15,14 +15,12 @@ public final class GlyphAPI {
         throw new RuntimeException();
     }
 
-    private static Glyph main; //Main instance
-
     /**
      * Gets a main instance of Glyph.
      * @return Glyph
      */
     public static @NotNull Glyph inst() {
-        return Objects.requireNonNull(main);
+        return (Glyph) kr.toxicity.hud.api.BetterHudAPI.inst();
     }
 
     /**
@@ -31,7 +29,6 @@ public final class GlyphAPI {
      */
     @ApiStatus.Internal
     public static void inst(@NotNull Glyph instance) {
-        if (main != null) throw new RuntimeException();
-        main = instance;
+        kr.toxicity.hud.api.BetterHudAPI.inst(Objects.requireNonNull(instance));
     }
 }

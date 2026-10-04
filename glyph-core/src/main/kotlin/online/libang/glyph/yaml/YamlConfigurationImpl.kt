@@ -1,6 +1,6 @@
 package online.libang.glyph.yaml
 
-import online.libang.glyph.api.yaml.YamlConfiguration
+import kr.toxicity.hud.api.yaml.YamlConfiguration
 
 abstract class YamlConfigurationImpl(
     private val path: String,

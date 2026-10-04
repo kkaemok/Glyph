@@ -54,6 +54,7 @@ bukkitPluginYaml {
     main = "$group.bootstrap.bukkit.BukkitBootstrapImpl"
     version = project.version.toString()
     name = rootProject.name
+    provides = listOf("BetterHud")
     apiVersion = "26.1"
     authors = listOf("Glyph contributors", "toxicity188 (BetterHud)")
     description = "A high-performance HUD engine for Paper and Velocity, based on BetterHud."
@@ -159,18 +160,19 @@ tasks {
         }
         dependencies {
             exclude(dependency("org.jetbrains:annotations:13.0"))
+            // Gson appears in BetterHud's public method descriptors; use the platform's shared types.
+            exclude(dependency("com.google.code.gson:gson:.*"))
         }
         fun prefix(pattern: String) {
             relocate(pattern, "$groupString.shaded.$pattern")
         }
         prefix("kotlin")
-        prefix("kr.toxicity.command.impl")
+        // BetterHud's public NMS contract exposes BetterCommand's CommandModule.
         prefix("org.bstats")
         prefix("net.objecthunter.exp4j")
         prefix("net.jodah.expiringmap")
         prefix("com.zaxxer.hikari")
         prefix("org.yaml.snakeyaml")
-        prefix("com.google.gson")
         prefix("it.unimi.dsi.fastutil")
         relocate("kr.toxicity.hud.bootstrap.bukkit.compatibility.gps", "$groupString.bootstrap.bukkit.compatibility.gps")
         mergeServiceFiles()

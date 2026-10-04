@@ -1,7 +1,7 @@
 package online.libang.glyph.util
 
-import online.libang.glyph.api.manager.ConfigManager
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.manager.ConfigManager
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.pack.PackMeta
 import java.io.File
 

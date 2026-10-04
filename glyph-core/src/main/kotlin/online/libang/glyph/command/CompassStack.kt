@@ -1,6 +1,6 @@
 package online.libang.glyph.command
 
-import online.libang.glyph.api.compass.Compass
+import kr.toxicity.hud.api.compass.Compass
 import java.util.Collections
 
 class CompassStack(

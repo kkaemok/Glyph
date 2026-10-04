@@ -1,10 +1,10 @@
 package online.libang.glyph.bootstrap.bukkit.util
 
-import online.libang.glyph.api.bukkit.BukkitBootstrap
-import online.libang.glyph.api.bukkit.trigger.HudBukkitEventTrigger
-import online.libang.glyph.api.bukkit.update.BukkitEventUpdateEvent
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.bukkit.BukkitBootstrap
+import kr.toxicity.hud.api.bukkit.trigger.HudBukkitEventTrigger
+import kr.toxicity.hud.api.bukkit.update.BukkitEventUpdateEvent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.manager.PlayerManagerImpl
 import online.libang.glyph.util.BOOTSTRAP
 import online.libang.glyph.util.LEGACY_SECTION_SERIALIZER

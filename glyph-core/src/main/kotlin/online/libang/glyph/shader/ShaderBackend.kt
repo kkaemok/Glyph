@@ -1,6 +1,6 @@
 package online.libang.glyph.shader
 
-import online.libang.glyph.api.manager.ShaderManager.ShaderType
+import kr.toxicity.hud.api.manager.ShaderManager.ShaderType
 import online.libang.glyph.util.BOOTSTRAP
 import java.nio.file.Files
 

@@ -4,19 +4,19 @@ import online.libang.glyph.GlyphImpl
 import online.libang.glyph.api.Glyph
 import online.libang.glyph.api.GlyphAPI
 import online.libang.glyph.api.GlyphLogger
-import online.libang.glyph.api.adapter.WorldWrapper
-import online.libang.glyph.api.bukkit.BukkitBootstrap
-import online.libang.glyph.api.bukkit.bedrock.BedrockAdapter
-import online.libang.glyph.api.bukkit.event.HudPlayerJoinEvent
-import online.libang.glyph.api.bukkit.event.HudPlayerQuitEvent
-import online.libang.glyph.api.bukkit.event.PluginReloadStartEvent
-import online.libang.glyph.api.bukkit.event.PluginReloadedEvent
-import online.libang.glyph.api.bukkit.nms.NMS
-import online.libang.glyph.api.manager.ConfigManager
-import online.libang.glyph.api.placeholder.HudPlaceholder
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.scheduler.HudScheduler
-import online.libang.glyph.api.version.MinecraftVersion
+import kr.toxicity.hud.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.bukkit.BukkitBootstrap
+import kr.toxicity.hud.api.bukkit.bedrock.BedrockAdapter
+import kr.toxicity.hud.api.bukkit.event.HudPlayerJoinEvent
+import kr.toxicity.hud.api.bukkit.event.HudPlayerQuitEvent
+import kr.toxicity.hud.api.bukkit.event.PluginReloadStartEvent
+import kr.toxicity.hud.api.bukkit.event.PluginReloadedEvent
+import kr.toxicity.hud.api.bukkit.nms.NMS
+import kr.toxicity.hud.api.manager.ConfigManager
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.scheduler.HudScheduler
+import kr.toxicity.hud.api.version.MinecraftVersion
 import online.libang.glyph.bedrock.FloodgateAdapter
 import online.libang.glyph.bedrock.GeyserAdapter
 import online.libang.glyph.bootstrap.bukkit.manager.CompatibilityManager
@@ -53,7 +53,7 @@ import java.io.InputStream
 import java.util.function.Function
 
 @Suppress("UNUSED")
-class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
+class BukkitBootstrapImpl : BukkitBootstrap, online.libang.glyph.api.GlyphBootstrap, JavaPlugin() {
 
     private val listener = object : Listener {}
 
@@ -166,7 +166,7 @@ class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
     override fun onLoad() {
         val pluginManager = Bukkit.getPluginManager()
         nms = when (minecraftVersion) {
-            MinecraftVersion.V26_3 -> online.libang.glyph.nms.v26_R2.NMSImpl(online.libang.glyph.api.bukkit.nms.NMSVersion.V26_R3)
+            MinecraftVersion.V26_3 -> online.libang.glyph.nms.v26_R2.NMSImpl(kr.toxicity.hud.api.bukkit.nms.NMSVersion.V26_R3)
             MinecraftVersion.V26_2 -> online.libang.glyph.nms.v26_R2.NMSImpl()
             MinecraftVersion.V26_1, MinecraftVersion.V26_1_1, MinecraftVersion.V26_1_2 -> online.libang.glyph.nms.v26_R1.NMSImpl()
             else -> {
@@ -318,7 +318,7 @@ class BukkitBootstrapImpl : BukkitBootstrap, JavaPlugin() {
         WorldWrapper(it.name)
     }
 
-    override fun classloader(): ClassLoader {
-        return javaClass.classLoader
+    override fun classloader(): java.net.URLClassLoader {
+        return javaClass.classLoader as java.net.URLClassLoader
     }
 }

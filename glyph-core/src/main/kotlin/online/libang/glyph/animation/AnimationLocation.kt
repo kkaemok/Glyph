@@ -1,6 +1,6 @@
 package online.libang.glyph.animation
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.equation.EquationTriple
 import online.libang.glyph.location.PixelLocation
 import online.libang.glyph.util.getAsAnimationType

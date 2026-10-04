@@ -1,7 +1,7 @@
 package online.libang.glyph.component
 
-import online.libang.glyph.api.component.PixelComponent
-import online.libang.glyph.api.component.WidthComponent
+import kr.toxicity.hud.api.component.PixelComponent
+import kr.toxicity.hud.api.component.WidthComponent
 import online.libang.glyph.layout.enums.LayoutAlign
 import online.libang.glyph.layout.enums.LayoutOffset
 import online.libang.glyph.util.EMPTY_WIDTH_COMPONENT

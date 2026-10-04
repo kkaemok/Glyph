@@ -1,6 +1,6 @@
 package online.libang.glyph.pack
 
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.util.*
 import online.libang.glyph.util.forEach

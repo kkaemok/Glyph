@@ -1,7 +1,7 @@
 package online.libang.glyph.bootstrap.bukkit.util
 
-import online.libang.glyph.api.bukkit.BukkitBootstrap
-import online.libang.glyph.api.bukkit.nms.NMSVersion
+import kr.toxicity.hud.api.bukkit.BukkitBootstrap
+import kr.toxicity.hud.api.bukkit.nms.NMSVersion
 import online.libang.glyph.manager.PlayerManagerImpl
 import online.libang.glyph.util.BOOTSTRAP
 import org.bukkit.Material

@@ -1,8 +1,8 @@
 package online.libang.glyph.bootstrap.velocity.player
 
 import com.velocitypowered.api.proxy.Player
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.adapter.WorldWrapper
 import online.libang.glyph.manager.PlayerManagerImpl
 import online.libang.glyph.player.HudPlayerImpl
 import online.libang.glyph.util.asyncTask

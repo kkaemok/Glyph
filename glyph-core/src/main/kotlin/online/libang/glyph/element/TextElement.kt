@@ -1,6 +1,6 @@
 package online.libang.glyph.element
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.placeholder.ConditionSource
 import online.libang.glyph.text.HudTextArray
 import online.libang.glyph.text.ImageTextScale

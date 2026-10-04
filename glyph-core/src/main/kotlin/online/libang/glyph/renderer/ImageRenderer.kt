@@ -1,8 +1,8 @@
 package online.libang.glyph.renderer
 
-import online.libang.glyph.api.component.PixelComponent
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.component.PixelComponent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.image.ImageComponent
 import online.libang.glyph.layout.ImageLayout
 import online.libang.glyph.manager.PlaceholderManagerImpl
@@ -35,7 +35,7 @@ class ImageRenderer(
 
     override fun render(event: UpdateEvent): TickProvider<HudPlayer, PixelComponent> {
         val cond = conditions build event
-        val listens = HashMap<ImageComponent, online.libang.glyph.api.listener.HudListener>()
+        val listens = HashMap<ImageComponent, kr.toxicity.hud.api.listener.HudListener>()
         fun register(c: ImageComponent) {
             if (listens.containsKey(c)) return
             listens[c] = c.listener(event)

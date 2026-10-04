@@ -1,6 +1,6 @@
 package online.libang.glyph.layout
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.layout.enums.LayoutAlign
 import online.libang.glyph.location.PixelLocation
 import online.libang.glyph.manager.PlayerHeadManager

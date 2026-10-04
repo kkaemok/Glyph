@@ -1,6 +1,6 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.background.HudBackground
 import online.libang.glyph.location.PixelLocation
 import online.libang.glyph.pack.PackGenerator

@@ -1,13 +1,13 @@
 package online.libang.glyph.compass.type
 
 import com.google.gson.JsonArray
-import online.libang.glyph.api.compass.Compass
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.configuration.HudComponentSupplier
-import online.libang.glyph.api.configuration.HudObjectType
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.compass.Compass
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.configuration.HudComponentSupplier
+import kr.toxicity.hud.api.configuration.HudObjectType
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.compass.CompassImpl
 import online.libang.glyph.equation.TEquation
 import online.libang.glyph.location.PixelLocation

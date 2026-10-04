@@ -1,6 +1,6 @@
 package online.libang.glyph.location
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 
 data class GuiLocation(val x: Double, val y: Double) : Comparable<GuiLocation> {
     companion object {

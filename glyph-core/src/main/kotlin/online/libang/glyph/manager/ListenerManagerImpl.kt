@@ -1,11 +1,11 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.listener.HudListener
-import online.libang.glyph.api.manager.ListenerManager
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.listener.HudListener
+import kr.toxicity.hud.api.manager.ListenerManager
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.placeholder.PlaceholderSource
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.ifNull

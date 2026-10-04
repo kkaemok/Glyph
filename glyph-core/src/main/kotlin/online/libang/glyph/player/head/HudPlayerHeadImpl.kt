@@ -1,6 +1,6 @@
 package online.libang.glyph.player.head
 
-import online.libang.glyph.api.player.HudPlayerHead
+import kr.toxicity.hud.api.player.HudPlayerHead
 import online.libang.glyph.manager.PlayerHeadManager
 import online.libang.glyph.util.*
 import net.kyori.adventure.text.format.NamedTextColor

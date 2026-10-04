@@ -1,6 +1,6 @@
 package online.libang.glyph.command
 
-import online.libang.glyph.api.popup.Popup
+import kr.toxicity.hud.api.popup.Popup
 import java.util.Collections
 
 class PopupStack(

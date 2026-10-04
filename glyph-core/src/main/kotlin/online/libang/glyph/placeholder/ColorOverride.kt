@@ -1,8 +1,8 @@
 package online.libang.glyph.placeholder
 
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.util.ifNull
 import online.libang.glyph.util.toConditions
 import online.libang.glyph.util.toTextColor

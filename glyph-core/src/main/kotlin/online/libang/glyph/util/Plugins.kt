@@ -2,9 +2,9 @@ package online.libang.glyph.util
 
 import online.libang.glyph.api.Glyph
 import online.libang.glyph.api.GlyphAPI
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.manager.ConfigManager
-import online.libang.glyph.api.manager.ConfigManager.DebugLevel
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.manager.ConfigManager
+import kr.toxicity.hud.api.manager.ConfigManager.DebugLevel
 import online.libang.glyph.manager.ConfigManagerImpl
 import net.kyori.adventure.text.Component
 import java.text.DecimalFormat

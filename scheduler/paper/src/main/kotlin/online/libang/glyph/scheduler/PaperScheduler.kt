@@ -1,9 +1,9 @@
 package online.libang.glyph.scheduler
 
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.scheduler.HudScheduler
-import online.libang.glyph.api.scheduler.HudTask
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.scheduler.HudScheduler
+import kr.toxicity.hud.api.scheduler.HudTask
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.Plugin

@@ -1,9 +1,9 @@
 package online.libang.glyph.popup
 
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.popup.PopupIterator
-import online.libang.glyph.api.popup.PopupIteratorGroup
-import online.libang.glyph.api.popup.PopupSortType
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.popup.PopupIterator
+import kr.toxicity.hud.api.popup.PopupIteratorGroup
+import kr.toxicity.hud.api.popup.PopupSortType
 import java.util.*
 
 class PopupIteratorGroupImpl : PopupIteratorGroup {

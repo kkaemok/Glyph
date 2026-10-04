@@ -1,6 +1,6 @@
 package online.libang.glyph.placeholder
 
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
 
 interface PlaceholderBuilder<T : Any> {
     val clazz: Class<out T>

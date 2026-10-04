@@ -1,8 +1,8 @@
 package online.libang.glyph.yaml
 
-import online.libang.glyph.api.yaml.YamlArray
-import online.libang.glyph.api.yaml.YamlElement
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlArray
+import kr.toxicity.hud.api.yaml.YamlElement
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.util.ifNull
 import java.io.Serializable
 

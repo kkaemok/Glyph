@@ -55,6 +55,37 @@ Minecraft's [minor-format rules](https://www.minecraft.net/en-us/article/minecra
 define integer upper bounds as every minor of that major;
 [26.3 uses resource format 97.1](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-3).
 
+The user subsequently confirmed that HUDs appear with OpenGL after applying the
+corrected pack. Vulkan retesting remains pending; this is not a visual result
+observed by the build tooling.
+
+## Original BetterHud API regression (2026-10-04)
+
+The renamed API caused third-party event registration and popup resolution to
+fail with missing `kr.toxicity.hud.api` classes. The inherited contracts now keep
+their original names and back the live Glyph objects directly. Paper declares
+the BetterHud dependency alias; native entrypoints share the original singleton.
+Public Gson and BetterCommand type identities are preserved in distributed jars.
+
+The full build and 45 existing tests passed with no failures/errors/skips.
+Both archives passed integrity, attribution, metadata, Java 25 and relocation
+checks. `tools/api/verify_compatibility.py` compiled the original API sources at
+`UPSTREAM_BASE` independently of Glyph, then checked the actual shaded jars:
+
+- Paper: 82 public types and 522 public/protected member descriptors preserved.
+- Velocity: 68 public types and 459 member descriptors preserved.
+- A consumer compiled only against the upstream API executed against the Paper
+  jar, with upstream API classes absent from its runtime classpath. It verified
+  shared singleton/bootstrap/managers, placeholder callbacks and mutable player
+  variables, Gson method signatures, registered Bukkit popup listeners, player
+  event identity, and popup updater call signatures.
+
+These checks cover the pinned public API and run in CI. They do not establish
+every historical BetterHud API, private implementation linkage, Typewriter's
+full dialogue behavior on a live server, or Velocity's old plugin dependency ID.
+See GLYPH_MIGRATION.md for the compatibility scope. Restart the server after
+replacing the jar so existing consumers can register their events again.
+
 ## Reproducible profiling
 
 ### Player initialization regression (2026-10-04)

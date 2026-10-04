@@ -1,11 +1,11 @@
 package online.libang.glyph.bootstrap.bukkit.module.bukkit
 
-import online.libang.glyph.api.bukkit.event.CustomPopupEvent
-import online.libang.glyph.api.bukkit.trigger.HudBukkitEventTrigger
-import online.libang.glyph.api.listener.HudListener
-import online.libang.glyph.api.placeholder.HudPlaceholder
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.bukkit.event.CustomPopupEvent
+import kr.toxicity.hud.api.bukkit.trigger.HudBukkitEventTrigger
+import kr.toxicity.hud.api.listener.HudListener
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.bootstrap.bukkit.module.BukkitModule
 import online.libang.glyph.bootstrap.bukkit.util.*
 import online.libang.glyph.util.ifNull

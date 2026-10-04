@@ -1,8 +1,8 @@
 package online.libang.glyph.util
 
-import online.libang.glyph.api.component.PixelComponent
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.version.MinecraftVersion
+import kr.toxicity.hud.api.component.PixelComponent
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.version.MinecraftVersion
 import online.libang.glyph.manager.ConfigManagerImpl
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component

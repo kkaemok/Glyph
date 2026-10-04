@@ -16,6 +16,8 @@ Fabric and Minecraft 1.21 implementations are intentionally removed. Private lib
 
 Use `GlyphAPI.inst().playerManager.getHudPlayer(uuid)` to obtain a HUD player. Its `hudState` accepts immutable `HudValue.Number`, `Boolean`, `Text`, `RichText` and `Identifier` values. `setAll` publishes related values atomically.
 
+Existing BetterHud integrations can use the original `kr.toxicity.hud.api` contracts. `BetterHudAPI.inst()` reaches Glyph's same live instance, and Paper provides the `BetterHud` dependency identity. Glyph's native entrypoints and extensions remain under `online.libang.glyph`. See [migration and compatibility scope](GLYPH_MIGRATION.md).
+
 Patterns support `[state_number:health]`, `[state_boolean:alive]` and `[state:name]`. Text is escaped as literal MiniMessage content; RichText preserves an Adventure component. Existing placeholders remain supported and each source is sampled once per player/event during a render frame.
 
 A layout can declare `dependencies: [health, alive]` to cache its rendered segment until those native inputs change. Declare **all** changing inputs. Leave this absent for legacy polling placeholders, player-following content and animations. An empty list declares a static layout. Force-update bypasses the cache. Unchanged final HUD output skips compaction, conversion and packets even with legacy polling.

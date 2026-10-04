@@ -2,8 +2,8 @@ package online.libang.glyph.util
 
 import kr.toxicity.command.BetterCommandSource
 import online.libang.glyph.animation.AnimationType
-import online.libang.glyph.api.yaml.YamlElement
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlElement
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.equation.TEquation
 import online.libang.glyph.placeholder.ColorOverride
 import online.libang.glyph.placeholder.ConditionBuilder

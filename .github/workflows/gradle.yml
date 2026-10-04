@@ -7,12 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v6
         with:
           java-version: '25'
           distribution: temurin
       - run: chmod +x gradlew
-      - run: ./gradlew build --stacktrace
+      - run: ./gradlew :glyph-core:test build :glyph-paper-api:writeCompatibilityClasspath --stacktrace
+      - run: python3 tools/api/verify_compatibility.py
       - uses: actions/upload-artifact@v6
         with:
           name: Glyph

@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression
 import ch.njol.skript.lang.SkriptParser
 import ch.njol.skript.util.LiteralUtils
 import ch.njol.util.Kleenean
-import online.libang.glyph.api.bukkit.event.CustomPopupEvent
+import kr.toxicity.hud.api.bukkit.event.CustomPopupEvent
 import online.libang.glyph.bootstrap.bukkit.util.call
 import org.bukkit.entity.Player
 import org.bukkit.event.Event

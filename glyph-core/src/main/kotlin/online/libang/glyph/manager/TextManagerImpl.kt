@@ -2,10 +2,10 @@ package online.libang.glyph.manager
 
 import com.google.gson.JsonArray
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
-import online.libang.glyph.api.manager.ConfigManager
-import online.libang.glyph.api.manager.TextManager
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.manager.ConfigManager
+import kr.toxicity.hud.api.manager.TextManager
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.configuration.PluginConfiguration
 import online.libang.glyph.element.TextElement
 import online.libang.glyph.image.LocatedImage

@@ -1,8 +1,8 @@
 package online.libang.glyph.hud
 
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.component.LayoutComponentContainer
 import online.libang.glyph.location.PixelLocation
 import online.libang.glyph.layout.LayoutGroup

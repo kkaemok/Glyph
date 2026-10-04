@@ -18,14 +18,14 @@ import online.libang.glyph.GlyphImpl
 import online.libang.glyph.api.Glyph
 import online.libang.glyph.api.GlyphAPI
 import online.libang.glyph.api.GlyphLogger
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.adapter.WorldWrapper
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.scheduler.HudScheduler
-import online.libang.glyph.api.scheduler.HudTask
-import online.libang.glyph.api.velocity.VelocityBootstrap
-import online.libang.glyph.api.version.MinecraftVersion
-import online.libang.glyph.api.volatilecode.VolatileCodeHandler
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.scheduler.HudScheduler
+import kr.toxicity.hud.api.scheduler.HudTask
+import kr.toxicity.hud.api.velocity.VelocityBootstrap
+import kr.toxicity.hud.api.version.MinecraftVersion
+import kr.toxicity.hud.api.volatilecode.VolatileCodeHandler
 import online.libang.glyph.bootstrap.velocity.manager.ModuleManager
 import online.libang.glyph.bootstrap.velocity.player.HudPlayerVelocity
 import online.libang.glyph.manager.CommandManager
@@ -54,7 +54,7 @@ class VelocityBootstrapImpl @Inject constructor(
     private val factory: Factory,
     private val description: PluginDescription,
     @param:DataDirectory private val dataFolder: Path
-): VelocityBootstrap {
+): VelocityBootstrap, online.libang.glyph.api.GlyphBootstrap {
 
     private val scheduler = object : HudScheduler {
         override fun task(runnable: Runnable): HudTask {
@@ -217,8 +217,8 @@ class VelocityBootstrapImpl @Inject constructor(
     override fun worlds(): List<WorldWrapper> = emptyList()
 
 
-    override fun classloader(): ClassLoader {
-        return javaClass.classLoader
+    override fun classloader(): java.net.URLClassLoader {
+        return javaClass.classLoader as java.net.URLClassLoader
     }
 
     private fun registerCommand() {

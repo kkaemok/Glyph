@@ -1,6 +1,6 @@
 package online.libang.glyph.compass
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.compass.type.CircleCompass
 import online.libang.glyph.resource.GlobalResource
 import java.io.File

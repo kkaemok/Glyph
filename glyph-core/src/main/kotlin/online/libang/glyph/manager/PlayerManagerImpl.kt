@@ -1,9 +1,9 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.PlayerManager
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.player.PointedLocationProvider
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.manager.PlayerManager
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.player.PointedLocationProvider
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.player.HudPlayerImpl
 import online.libang.glyph.resource.GlobalResource
 import java.io.File

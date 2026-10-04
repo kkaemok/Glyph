@@ -1,4 +1,4 @@
-import online.libang.glyph.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
 import online.libang.glyph.bootstrap.velocity.module.Module
 import online.libang.glyph.bootstrap.velocity.module.MODULE_VELOCITY
 import online.libang.glyph.manager.ListenerManagerImpl

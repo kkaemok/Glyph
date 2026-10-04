@@ -1,14 +1,14 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.PlaceholderManager
-import online.libang.glyph.api.placeholder.HudPlaceholder
-import online.libang.glyph.api.placeholder.PlaceholderContainer
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.update.PopupUpdateEvent
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlElement
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.manager.PlaceholderManager
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.placeholder.PlaceholderContainer
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.update.PopupUpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlElement
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.equation.TEquation
 import online.libang.glyph.placeholder.Placeholder
 import online.libang.glyph.placeholder.PlaceholderBuilder

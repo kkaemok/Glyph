@@ -1,8 +1,8 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.PopupManager
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.popup.Popup
+import kr.toxicity.hud.api.manager.PopupManager
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.popup.Popup
 import online.libang.glyph.popup.PopupImpl
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.*

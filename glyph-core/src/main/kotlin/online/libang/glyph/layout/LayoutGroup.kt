@@ -1,7 +1,7 @@
 package online.libang.glyph.layout
 
 import kr.toxicity.command.BetterCommandSource
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.configuration.HudConfiguration
 import online.libang.glyph.layout.enums.LayoutAlign
 import online.libang.glyph.layout.enums.LayoutOffset

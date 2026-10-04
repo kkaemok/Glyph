@@ -1,8 +1,8 @@
 package online.libang.glyph.transport
 
 import online.libang.glyph.api.GlyphAPI
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.player.HudPlayer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.TranslatableComponent

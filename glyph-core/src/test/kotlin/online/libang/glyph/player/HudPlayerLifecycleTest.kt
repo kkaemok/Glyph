@@ -1,8 +1,8 @@
 package online.libang.glyph.player
 
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.adapter.WorldWrapper
-import online.libang.glyph.api.scheduler.HudTask
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.scheduler.HudTask
 import net.kyori.adventure.audience.Audience
 import java.util.Locale
 import java.util.UUID

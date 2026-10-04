@@ -116,3 +116,28 @@ bounds to major.0. Glyph's bounded 26.3 overlay consequently excluded the actual
 and minor-aware collision checks now preserve the intended range. This divergence
 is validated through Minecraft's overlay codec and CraftEngine's actual serializer;
 carry it forward during upstream pack/compiler ports.
+
+## Original public API compatibility (2026-10-04)
+
+The initial public-package rename prevented existing BetterHud consumers from
+linking. Restore the inherited neutral, Bukkit and Velocity contracts under
+`kr.toxicity.hud.api` while keeping implementation packages under Glyph. `Glyph`
+extends `BetterHud` and both entrypoints use one singleton. Managers and events
+operate on the original types directly; there is no second renderer, state copy,
+or reflection adapter in the render/packet path. Native state and effect APIs
+remain in Glyph's namespace.
+
+Keep historical API enum symbols and `BetterHudDependency` descriptors for
+linking without restoring Fabric/legacy server adapters or runtime library
+injection. `isFabric()` defaults to false. The original bootstrap classloader
+return descriptor remains `URLClassLoader`, using the platform's existing loader.
+Paper declares the `BetterHud` dependency alias. Velocity retains ID `glyph`;
+its plugin dependency IDs require a separate integration update.
+
+Gson is provided by the platform and BetterCommand retains its original names:
+upstream exposes both in public descriptors, so relocating them breaks ABI.
+Private libraries remain shaded. `tools/api/verify_compatibility.py` compiles the
+full original API from `UPSTREAM_BASE`, compares distributed public descriptors,
+and executes an upstream-compiled consumer against Glyph without upstream API
+classes at runtime. CI runs this check on both distributions. Upstream ports
+must preserve these contracts or explicitly document a versioned API change.

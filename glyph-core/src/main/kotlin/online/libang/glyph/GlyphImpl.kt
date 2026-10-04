@@ -2,11 +2,11 @@ package online.libang.glyph
 
 import online.libang.glyph.api.Glyph
 import online.libang.glyph.api.GlyphBootstrap
-import online.libang.glyph.api.manager.*
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.plugin.ReloadState
-import online.libang.glyph.api.plugin.ReloadState.Failure
-import online.libang.glyph.api.plugin.ReloadState.Success
+import kr.toxicity.hud.api.manager.*
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.plugin.ReloadState
+import kr.toxicity.hud.api.plugin.ReloadState.Failure
+import kr.toxicity.hud.api.plugin.ReloadState.Success
 import online.libang.glyph.manager.*
 import online.libang.glyph.pack.PackGenerator
 import online.libang.glyph.pack.PackUploader

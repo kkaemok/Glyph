@@ -1,8 +1,8 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.hud.Hud
-import online.libang.glyph.api.manager.HudManager
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.hud.Hud
+import kr.toxicity.hud.api.manager.HudManager
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.hud.HudImpl
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.*

@@ -1,8 +1,8 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.ShaderManager
-import online.libang.glyph.api.manager.ShaderManager.*
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.manager.ShaderManager
+import kr.toxicity.hud.api.manager.ShaderManager.*
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.configuration.PluginConfiguration
 import online.libang.glyph.pack.PackGenerator
 import online.libang.glyph.pack.PackOverlay

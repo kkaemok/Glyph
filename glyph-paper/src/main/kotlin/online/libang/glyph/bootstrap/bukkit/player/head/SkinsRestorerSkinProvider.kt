@@ -1,6 +1,6 @@
 package online.libang.glyph.bootstrap.bukkit.player.head
 
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayer
 import online.libang.glyph.player.head.PlayerSkinProvider
 import net.skinsrestorer.api.SkinsRestorerProvider
 import org.bukkit.Bukkit

@@ -1,8 +1,8 @@
 package online.libang.glyph.bootstrap.velocity
 
 import com.velocitypowered.proxy.connection.client.ConnectedPlayer
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.volatilecode.VolatileCodeHandler
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.volatilecode.VolatileCodeHandler
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import java.util.UUID

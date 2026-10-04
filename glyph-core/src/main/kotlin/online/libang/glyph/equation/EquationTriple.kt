@@ -1,6 +1,6 @@
 package online.libang.glyph.equation
 
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.util.ifNull
 import online.libang.glyph.util.toEquation
 

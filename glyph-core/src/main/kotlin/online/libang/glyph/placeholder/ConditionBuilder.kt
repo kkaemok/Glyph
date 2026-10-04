@@ -1,7 +1,7 @@
 package online.libang.glyph.placeholder
 
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
 
 fun interface ConditionBuilder {
     companion object {

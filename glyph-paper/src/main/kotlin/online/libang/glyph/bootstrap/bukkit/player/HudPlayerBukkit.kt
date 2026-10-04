@@ -1,7 +1,7 @@
 package online.libang.glyph.bootstrap.bukkit.player
 
-import online.libang.glyph.api.adapter.LocationWrapper
-import online.libang.glyph.api.adapter.WorldWrapper
+import kr.toxicity.hud.api.adapter.LocationWrapper
+import kr.toxicity.hud.api.adapter.WorldWrapper
 import online.libang.glyph.bootstrap.bukkit.BukkitBootstrapImpl
 import online.libang.glyph.player.HudPlayerImpl
 import online.libang.glyph.util.BOOTSTRAP
@@ -41,10 +41,10 @@ class HudPlayerBukkit(
         )
     }
 
-    override fun scheduleOwned(period: Long, action: () -> Unit): online.libang.glyph.api.scheduler.HudTask {
+    override fun scheduleOwned(period: Long, action: () -> Unit): kr.toxicity.hud.api.scheduler.HudTask {
         val scheduled = player.scheduler.runAtFixedRate(BOOTSTRAP as org.bukkit.plugin.Plugin,
             { action() }, null, 1, period)
-        return object : online.libang.glyph.api.scheduler.HudTask {
+        return object : kr.toxicity.hud.api.scheduler.HudTask {
             override fun isCancelled(): Boolean = scheduled == null || scheduled.isCancelled
             override fun cancel() { scheduled?.cancel() }
         }

@@ -1,8 +1,8 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.compass.Compass
-import online.libang.glyph.api.manager.CompassManager
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.compass.Compass
+import kr.toxicity.hud.api.manager.CompassManager
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.compass.CompassImpl
 import online.libang.glyph.compass.CompassType
 import online.libang.glyph.resource.GlobalResource

@@ -1,13 +1,13 @@
 package online.libang.glyph.popup
 
-import online.libang.glyph.api.component.WidthComponent
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.popup.Popup
-import online.libang.glyph.api.popup.Popup.FrameType.*
-import online.libang.glyph.api.popup.PopupIterator
-import online.libang.glyph.api.popup.PopupSortType
-import online.libang.glyph.api.update.PopupUpdateEvent
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.component.WidthComponent
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.popup.Popup
+import kr.toxicity.hud.api.popup.Popup.FrameType.*
+import kr.toxicity.hud.api.popup.PopupIterator
+import kr.toxicity.hud.api.popup.PopupSortType
+import kr.toxicity.hud.api.update.PopupUpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.util.Runner
 import online.libang.glyph.util.runByTick
 import java.util.*

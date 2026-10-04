@@ -1,6 +1,6 @@
 package online.libang.glyph.player
 
-import online.libang.glyph.api.scheduler.HudTask
+import kr.toxicity.hud.api.scheduler.HudTask
 
 class HudPlayerTask(
     private val creator: () -> HudTask?

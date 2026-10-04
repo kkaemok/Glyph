@@ -1,6 +1,6 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.plugin.ReloadInfo
 import online.libang.glyph.layout.LayoutGroup
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.*

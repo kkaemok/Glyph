@@ -1,6 +1,6 @@
 package online.libang.glyph.player.head
 
-import online.libang.glyph.api.player.HudPlayer
+import kr.toxicity.hud.api.player.HudPlayer
 
 interface PlayerSkinProvider {
     fun provide(player: HudPlayer): String?

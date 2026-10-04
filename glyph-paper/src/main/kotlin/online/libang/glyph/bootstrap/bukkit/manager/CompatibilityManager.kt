@@ -1,6 +1,6 @@
 package online.libang.glyph.bootstrap.bukkit.manager
 
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.bootstrap.bukkit.compatibility.craftengine.CraftEngineCompatibility
 import online.libang.glyph.bootstrap.bukkit.compatibility.mmocore.MMOCoreCompatibility
 import online.libang.glyph.bootstrap.bukkit.compatibility.mmoitems.MMOItemsCompatibility

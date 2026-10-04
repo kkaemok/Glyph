@@ -1,6 +1,6 @@
 package online.libang.glyph.bootstrap.bukkit.util
 
-import online.libang.glyph.api.bukkit.nms.NMS
+import kr.toxicity.hud.api.bukkit.nms.NMS
 import online.libang.glyph.util.BOOTSTRAP
 import online.libang.glyph.util.VOLATILE_CODE
 import org.bukkit.entity.Entity

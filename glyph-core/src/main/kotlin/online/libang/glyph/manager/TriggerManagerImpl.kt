@@ -1,9 +1,9 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.TriggerManager
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.trigger.HudTrigger
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.manager.TriggerManager
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.trigger.HudTrigger
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.util.ifNull
 import java.io.File

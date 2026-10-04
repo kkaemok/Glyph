@@ -1,14 +1,14 @@
 package online.libang.glyph.popup
 
 import com.google.gson.JsonArray
-import online.libang.glyph.api.configuration.HudObjectType
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.popup.Popup
-import online.libang.glyph.api.popup.Popup.FrameType
-import online.libang.glyph.api.popup.PopupSortType
-import online.libang.glyph.api.popup.PopupUpdater
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.configuration.HudObjectType
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.popup.Popup
+import kr.toxicity.hud.api.popup.Popup.FrameType
+import kr.toxicity.hud.api.popup.PopupSortType
+import kr.toxicity.hud.api.popup.PopupUpdater
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.configuration.HudConfiguration
 import online.libang.glyph.equation.EquationPairLocation
 import online.libang.glyph.location.PixelLocation

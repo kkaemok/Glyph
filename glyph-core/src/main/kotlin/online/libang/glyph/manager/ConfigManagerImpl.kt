@@ -1,9 +1,9 @@
 package online.libang.glyph.manager
 
-import online.libang.glyph.api.manager.ConfigManager
-import online.libang.glyph.api.manager.ConfigManager.DebugLevel
-import online.libang.glyph.api.plugin.ReloadInfo
-import online.libang.glyph.api.version.MinecraftVersion
+import kr.toxicity.hud.api.manager.ConfigManager
+import kr.toxicity.hud.api.manager.ConfigManager.DebugLevel
+import kr.toxicity.hud.api.plugin.ReloadInfo
+import kr.toxicity.hud.api.version.MinecraftVersion
 import online.libang.glyph.configuration.PluginConfiguration
 import online.libang.glyph.pack.PackGenerator
 import online.libang.glyph.pack.PackType

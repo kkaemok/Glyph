@@ -1,4 +1,4 @@
-import online.libang.glyph.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
 import online.libang.glyph.bootstrap.bukkit.compatibility.Compatibility
 import online.libang.glyph.bootstrap.bukkit.manager.CompatibilityManager
 import online.libang.glyph.bootstrap.bukkit.module.MODULE_BUKKIT

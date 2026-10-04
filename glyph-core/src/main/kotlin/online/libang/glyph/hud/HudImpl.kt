@@ -1,12 +1,12 @@
 package online.libang.glyph.hud
 
 import com.google.gson.JsonArray
-import online.libang.glyph.api.configuration.HudComponentSupplier
-import online.libang.glyph.api.configuration.HudObjectType
-import online.libang.glyph.api.hud.Hud
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.configuration.HudComponentSupplier
+import kr.toxicity.hud.api.configuration.HudObjectType
+import kr.toxicity.hud.api.hud.Hud
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.configuration.HudConfiguration
 import online.libang.glyph.location.PixelLocation
 import online.libang.glyph.animation.AnimationType

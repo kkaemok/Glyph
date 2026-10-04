@@ -2,12 +2,12 @@ package online.libang.glyph.bootstrap.bukkit.compatibility.worldguard
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldguard.WorldGuard
-import online.libang.glyph.api.listener.HudListener
-import online.libang.glyph.api.placeholder.HudPlaceholder
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.trigger.HudTrigger
-import online.libang.glyph.api.update.UpdateEvent
-import online.libang.glyph.api.yaml.YamlObject
+import kr.toxicity.hud.api.listener.HudListener
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.trigger.HudTrigger
+import kr.toxicity.hud.api.update.UpdateEvent
+import kr.toxicity.hud.api.yaml.YamlObject
 import online.libang.glyph.bootstrap.bukkit.compatibility.Compatibility
 import online.libang.glyph.bootstrap.bukkit.util.bukkitPlayer
 import java.util.function.Function

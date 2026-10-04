@@ -1,10 +1,10 @@
 package online.libang.glyph.renderer
 
-import online.libang.glyph.api.player.HudPlayer
-import online.libang.glyph.api.placeholder.HudPlaceholder
+import kr.toxicity.hud.api.player.HudPlayer
+import kr.toxicity.hud.api.placeholder.HudPlaceholder
 import online.libang.glyph.api.state.HudState
 import online.libang.glyph.api.state.HudValue
-import online.libang.glyph.api.update.UpdateEvent
+import kr.toxicity.hud.api.update.UpdateEvent
 import online.libang.glyph.manager.PlaceholderManagerImpl
 import online.libang.glyph.placeholder.PlaceholderSource
 import java.lang.reflect.Proxy
