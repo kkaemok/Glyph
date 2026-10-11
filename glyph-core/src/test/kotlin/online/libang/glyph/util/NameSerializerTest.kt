@@ -14,12 +14,12 @@ class NameSerializerTest {
 
     @Test
     fun legacyColorCodeIsConverted() {
-        assertEquals("<red>Zombie", "짠cZombie".toMiniMessageString())
+        assertEquals("<red>Zombie", "\u00a7cZombie".toMiniMessageString())
     }
 
     @Test
     fun hexColorCodeIsConverted() {
-        assertEquals("<#FFD800>Test", "짠x짠F짠F짠D짠8짠0짠0Test".toMiniMessageString())
+        assertEquals("<#FFD800>Test", "\u00a7x\u00a7F\u00a7F\u00a7D\u00a78\u00a70\u00a70Test".toMiniMessageString())
     }
 
     @Test
@@ -37,9 +37,23 @@ class NameSerializerTest {
 
     @Test
     fun conversionRoundTripsThroughMiniMessage() {
-        val input = "짠cCustom 짠lName"
+        val input = "\u00a7cCustom \u00a7lName"
         val result = input.toMiniMessageString()
         val expected = LEGACY_SECTION_SERIALIZER.deserialize(input)
         assertEquals(expected, MiniMessage.miniMessage().deserialize(result))
+    }
+
+    @Test
+    fun koreanTextIsNotMistakenForFormatting() {
+        assertEquals("짠cZombie", "짠cZombie".toMiniMessageString())
+    }
+
+    @Test
+    fun combinedSerializerAcceptsBothActualLegacyPrefixes() {
+        val parsed = LEGACY_BOTH("&cRed \u00a7lBold")
+        val expected = net.kyori.adventure.text.Component.text("Red ", net.kyori.adventure.text.format.NamedTextColor.RED)
+            .append(net.kyori.adventure.text.Component.text("Bold")
+                .decorate(net.kyori.adventure.text.format.TextDecoration.BOLD))
+        assertEquals(expected, parsed)
     }
 }

@@ -19,7 +19,7 @@ data class FlowLayout(val mode: Mode = Mode.ABSOLUTE, val gap: Int = 0, val padd
         return Row(IntArray(widths.size) { index ->
             if (widths[index] == 0) x else {
                 if (placed > 0) x += gap + if (justify == Justify.SPACE_BETWEEN && active > 1)
-                    free * placed / (active - 1) - free * (placed - 1) / (active - 1) else 0
+                    (free.toLong() * placed / (active - 1) - free.toLong() * (placed - 1) / (active - 1)).toInt() else 0
                 placed++
                 x.also { x += widths[index] }
             }

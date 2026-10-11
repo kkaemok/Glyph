@@ -20,4 +20,10 @@ class FlowLayoutTest {
         assertFailsWith<IllegalArgumentException> { FlowLayout(gap = -1) }
         assertFailsWith<IllegalArgumentException> { FlowLayout().row(intArrayOf(Int.MAX_VALUE, 1)) }
     }
+    @Test fun `justification does not overflow valid integer geometry`() {
+        val row = FlowLayout(FlowLayout.Mode.ROW, minWidth = Int.MAX_VALUE,
+            justify = FlowLayout.Justify.SPACE_BETWEEN).row(intArrayOf(1, 1, 1))
+        assertEquals(Int.MAX_VALUE, row.width)
+        assertContentEquals(intArrayOf(0, 1_073_741_823, 2_147_483_646), row.offsets)
+    }
 }

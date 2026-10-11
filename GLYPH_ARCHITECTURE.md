@@ -106,10 +106,9 @@ reload. Paper/Velocity connection lifecycle and restoration still need live test
 Paper resource requests retain other packs and use a stable Glyph pack identity,
 so changing a hash updates Glyph's entry rather than accumulating it. Keep shared
 shaders/fonts in one compiler: pack stacking alone cannot resolve those collisions.
-CraftEngine handoff checks active overlay assets against its declared resource
-folders and external packs, replaces prior registered output on successful reload,
-and rejects conflicting registration. Assets generated later inside CraftEngine
-are outside that event's exposed cache API and need final-pack/client verification.
+CraftEngine handoff follows BetterHud's original async cache event: reload Glyph
+and register the returned build ZIP or directory directly. CraftEngine controls
+external resource merging; Glyph's own pack compiler validates its own inputs.
 
 The existing glyph/font renderer remains the current backend. Future official
 3D/depth rendering can use a separate backend behind the transport boundary;

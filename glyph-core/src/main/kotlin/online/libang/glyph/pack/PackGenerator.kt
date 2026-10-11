@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream
 object PackGenerator {
     private val tasks = TreeMap<String, MutableList<Pair<String, PackFile>>>()
 
-    fun generate(info: ReloadInfo): Map<String, ByteArray> {
+    internal fun generate(info: ReloadInfo): CompiledPack {
         val sender = info.sender
         val resourcePack = runCatching {
             var meta = PackMeta.default
@@ -42,7 +42,7 @@ object PackGenerator {
             val compiler = CompiledPack.Builder()
             val snapshot = synchronized(tasks) { tasks.values.flatMap { it.toList() } }
             for ((origin, task) in snapshot) compiler.add(task.path, task(), origin)
-            compiler.build().files
+            compiler.build()
 
         }.getOrElse {
             it.handle(sender, "Unable to make a resource pack.")

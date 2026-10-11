@@ -42,6 +42,11 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 
 ## Documentation
 
+Use `/glyph` as the primary command. `/betterhud`, `/bh` and `/hud` are aliases
+of the same command tree on Paper and Velocity. Non-OP users need `glyph` root
+access and the relevant `glyph.*` subcommand permission; root access includes
+`glyph.help` on Paper.
+
 - [Upstream review and sync policy](GLYPH_UPSTREAM_NOTES.md)
 - [Architecture](GLYPH_ARCHITECTURE.md)
 - [Validation and profiling](GLYPH_PERFORMANCE.md)
@@ -51,6 +56,7 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 - [CraftEngine integration using BetterHud's original behavior](GLYPH_PACK_COMPATIBILITY.md)
 - [Async popup lifecycle and Typewriter investigation](GLYPH_POPUP_LIFECYCLE.md)
 - [Typewriter version comparison and reload recovery](GLYPH_TYPEWRITER_COMPARISON.md)
+- [Fork maintainability audit](GLYPH_FORK_AUDIT.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution

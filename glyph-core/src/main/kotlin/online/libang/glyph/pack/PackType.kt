@@ -8,9 +8,8 @@ import java.security.MessageDigest
 
 enum class PackType {
     FOLDER, ZIP, NONE;
-    fun generate(byteMap: Map<String, ByteArray>): File? {
+    internal fun generate(pack: CompiledPack): File? {
         if (this == NONE) { PackUploader.stop(); return null }
-        val pack = CompiledPack.of(byteMap)
         require(!ConfigManagerImpl.enableProtection) {
             "enable-protection is unsupported: invalid ZIP metadata is incompatible with deterministic packs. Disable it."
         }

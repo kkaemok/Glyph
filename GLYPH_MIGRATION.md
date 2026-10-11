@@ -32,3 +32,9 @@ complete pack set. Shared core shaders and `end_of_frame` need one explicit owne
 CraftEngine's integration follows BetterHud's direct build-output registration;
 CraftEngine handles external resource merging. See GLYPH_CONFIGURATION.md for the new
 flow, directory-image and nine-slice syntax.
+
+The primary command is `/glyph`; `/betterhud`, `/bh` and `/hud` use the same
+command tree. Its root permission is now `glyph`, matching the existing
+`glyph.*` subcommand permissions. Non-OP roles that previously granted `hud`
+root access should grant `glyph` instead. Paper root access includes `glyph.help`;
+each subcommand retains its own permission check.

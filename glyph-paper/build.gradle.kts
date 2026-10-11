@@ -82,6 +82,11 @@ bukkitPluginYaml {
         "Nexo"
     )
     permissions {
+        create("glyph") {
+            description = "Accesses Glyph's root command. Subcommands require their own permissions."
+            default = Permission.Default.OP
+            children = mapOf("glyph.help" to true)
+        }
         create("glyph.help") {
             description = "Accesses to help command."
             default = Permission.Default.OP

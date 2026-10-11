@@ -117,7 +117,7 @@ class GlyphImpl(val bootstrap: GlyphBootstrap) : Glyph {
             }
             PackGenerator.generate(info).run {
                 Success(
-                    this,
+                    files,
                     ConfigManagerImpl.packType.generate(this),
                     System.currentTimeMillis() - time
                 )

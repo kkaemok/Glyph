@@ -121,9 +121,9 @@ object CommandManager : GlyphManager {
         }
 
     @Suppress("UNUSED")
-    val module = library.module<BetterCommandSource>("hud")
-        .aliases(arrayOf("betterhud", "bh"))
-        .permission("hud")
+    val module = library.module<BetterCommandSource>("glyph")
+        .aliases(arrayOf("betterhud", "bh", "hud"))
+        .permission("glyph")
         .executes(object : CommandListener {
 
             //Reload

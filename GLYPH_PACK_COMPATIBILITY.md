@@ -29,7 +29,7 @@ The restored integration never registers that file. If it was manually added to
 CraftEngine's configuration, remove that manual entry and use Glyph's build
 output. A full server restart gives CraftEngine fresh cache input sets.
 
-## Validation (2026-10-11)
+## Validation of 9d65a59d (2026-10-11, before the fork audit)
 
 `gradlew.bat test build :glyph-paper-api:writeCompatibilityClasspath` passed in
 2m 22s. All 79 remaining tests passed with zero failures, errors or skips. The

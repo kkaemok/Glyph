@@ -32,13 +32,16 @@ internal class CompiledPack private constructor(val files: Map<String, ByteArray
         }
     }
     companion object {
+        private val assetPath = Regex("(?:[^/]+/)?assets/([^/]+)/(.*)")
+        private val namespace = Regex("[a-z0-9_.-]+")
+        private val identifier = Regex("[a-z0-9/._-]+")
         fun validatePath(path: String) {
             require(path.isNotEmpty() && !path.startsWith('/') && '\\' !in path && ':' !in path && '\u0000' !in path) { "Invalid pack path: $path" }
             require(path.split('/').none { it.isEmpty() || it == "." || it == ".." }) { "Invalid pack path: $path" }
-            val asset = Regex("(?:[^/]+/)?assets/([^/]+)/(.*)").matchEntire(path)
+            val asset = assetPath.matchEntire(path)
             if (asset != null) {
-                require(asset.groupValues[1].matches(Regex("[a-z0-9_.-]+"))) { "Invalid resource namespace: $path" }
-                require(asset.groupValues[2].matches(Regex("[a-z0-9/._-]+"))) { "Invalid resource identifier: $path" }
+                require(asset.groupValues[1].matches(namespace)) { "Invalid resource namespace: $path" }
+                require(asset.groupValues[2].matches(identifier)) { "Invalid resource identifier: $path" }
             }
         }
         fun of(files: Map<String, ByteArray>): CompiledPack = Builder().apply {
