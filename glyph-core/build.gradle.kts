@@ -11,6 +11,11 @@ dependencies {
     testImplementation(libs.bundles.library)
 }
 
+sourceSets.test {
+    resources.srcDir(rootProject.file("common-resources"))
+    resources.include("shader/26.3/**", "fixtures/**")
+}
+
 tasks.register<JavaExec>("profileCore") {
     group = "verification"
     description = "Profile state, dependency cache and send decisions without Minecraft."

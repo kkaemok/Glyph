@@ -1,8 +1,31 @@
 import java.nio.file.*;
+import java.nio.*;
 import static org.lwjgl.util.shaderc.Shaderc.*;
 
-/** Offline ShaderC smoke check. Inputs must have Minecraft includes and Glyph tags expanded. */
+/** Offline ShaderC check. Optional second argument asserts whether vertex SPIR-V declares Globals. */
 public final class ValidateShaders {
+    private static boolean declaresGlobals(ByteBuffer code) {
+        IntBuffer words = code.duplicate().order(ByteOrder.LITTLE_ENDIAN).asIntBuffer();
+        // SPIR-V OpName records retain uniform block names with ShaderC's default optimization.
+        for (int offset = 5; offset < words.limit();) {
+            int header = words.get(offset), count = header >>> 16, opcode = header & 0xffff;
+            if (count == 0 || offset + count > words.limit()) throw new IllegalStateException("Invalid SPIR-V instruction");
+            if (opcode == 5) {
+                StringBuilder name = new StringBuilder();
+                for (int index = offset + 2; index < offset + count; index++) {
+                    int word = words.get(index);
+                    for (int shift = 0; shift < 32; shift += 8) {
+                        int character = (word >>> shift) & 0xff;
+                        if (character != 0) name.append((char) character);
+                    }
+                }
+                if (name.toString().equals("Globals")) return true;
+            }
+            offset += count;
+        }
+        return false;
+    }
+
     public static void main(String[] args) throws Exception {
         long compiler = shaderc_compiler_initialize();
         int passed = 0, failed = 0;
@@ -20,7 +43,13 @@ public final class ValidateShaders {
                         file.getFileName().toString(), "main", options);
                     String target = vulkan ? "Vulkan" : "OpenGL";
                     if (shaderc_result_get_compilation_status(result) == shaderc_compilation_status_success) {
-                        passed++; System.out.println("PASS " + target + " " + file.getFileName());
+                        boolean matches = args.length < 2 || !file.toString().endsWith(".vsh")
+                            || declaresGlobals(shaderc_result_get_bytes(result)) == Boolean.parseBoolean(args[1]);
+                        if (matches) {
+                            passed++; System.out.println("PASS " + target + " " + file.getFileName());
+                        } else {
+                            failed++; System.out.println("FAIL " + target + " " + file.getFileName() + " Globals contract: expected " + args[1]);
+                        }
                     } else {
                         failed++; System.out.println("FAIL " + target + " " + file.getFileName() + "\n" + shaderc_result_get_error_message(result));
                     }

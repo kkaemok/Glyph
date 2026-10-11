@@ -1,7 +1,18 @@
 #version 330
 #extension GL_ARB_separate_shader_objects : require
 #CreateConstant
+
+// Preserve the full environment when another compiler uses this template.
+#ifndef GLYPH_SHADER_PROPERTIES
+#define GLYPH_SHADER_PROPERTIES 7
+#endif
+#ifndef GLYPH_STATIC_SCALE
+#define GLYPH_STATIC_SCALE 1
+#endif
+
+#if GLYPH_SHADER_PROPERTIES != 0 || GLYPH_STATIC_SCALE
 #include <minecraft:globals.glsl>
+#endif
 
 #if !defined(IS_GUI) && !defined(IS_SEE_THROUGH)
 #include <minecraft:fog.glsl>
@@ -34,7 +45,9 @@ void main() {
     vec3 pos = Position;
     bool glyph = false;
     vec2 ui = ceil(2 / vec2(ProjMat[0][0], -ProjMat[1][1]));
+#if GLYPH_STATIC_SCALE
     vec2 uiScreen = ui / ScreenSize;
+#endif
     vec3 color = Color.xyz;
     vertexColor = Color;
     if (pos.y >= ui.y && ProjMat[3].x == -1) {
@@ -64,10 +77,13 @@ void main() {
 
 
             //Wave
+#if (GLYPH_SHADER_PROPERTIES & 1) != 0
             if ((property & 1) > 0) {
                 pos.y += 4 * sin((GameTime * 1200 + pos.x / ui.x) * 3.1415 * 2);
             }
+#endif
             //Rainbow
+#if (GLYPH_SHADER_PROPERTIES & 2) != 0
             if ((property & 2) > 0) {
                 int hash = int(pos.x) * int(pos.y);
                 float time = GameTime * 1200;
@@ -80,7 +96,9 @@ void main() {
                 float maxValue = max(max(r, g), b);
                 vertexColor = vec4(pow(r / maxValue, 3), pow(g / maxValue, 3), pow(b / maxValue, 3), vertexColor.w);
             }
+#endif
             //Tiny rainbow
+#if (GLYPH_SHADER_PROPERTIES & 4) != 0
             if ((property & 4) > 0) {
                 int hash = int(pos.x) * int(pos.y);
                 float time = GameTime * 1200;
@@ -92,6 +110,7 @@ void main() {
                 float b = vertexColor.z + float(hash % 64) / 255;
                 vertexColor = vec4(r, g, b, vertexColor.w);
             }
+#endif
 
             pos.x += xGui;
             pos.y += yGui;

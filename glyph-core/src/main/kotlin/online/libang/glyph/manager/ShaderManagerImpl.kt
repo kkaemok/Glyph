@@ -8,6 +8,7 @@ import online.libang.glyph.pack.PackGenerator
 import online.libang.glyph.pack.PackOverlay
 import online.libang.glyph.resource.GlobalResource
 import online.libang.glyph.shader.HudShader
+import online.libang.glyph.shader.ShaderFeatures
 import online.libang.glyph.util.*
 import net.kyori.adventure.bossbar.BossBar
 import java.awt.image.BufferedImage
@@ -38,6 +39,7 @@ object ShaderManagerImpl : GlyphManager, ShaderManager {
 
     private val hudShaders = TreeMap<HudShader, MutableList<(Int) -> Unit>>()
     private var compiledLayout = arrayListOf<String>()
+    private var shaderFeatures = ShaderFeatures.NONE
 
     private val tagSupplierMap = ConcurrentHashMap<ShaderType, ShaderTagSupplier>()
 
@@ -133,6 +135,7 @@ object ShaderManagerImpl : GlyphManager, ShaderManager {
     }
 
     private fun compileShader(resource: GlobalResource) {
+        shaderFeatures = ShaderFeatures.from(hudShaders.keys)
         compiledLayout = hudShaders.entries.foldIndexed(arrayListOf()) { index, arr, entry ->
             val shader = entry.key
             val id = index + 1
@@ -182,6 +185,15 @@ object ShaderManagerImpl : GlyphManager, ShaderManager {
         }
         return shaders.flatMap { (key, args) ->
             val tagSupplier = (tagSupplierMap[key] ?: EMPTY_SUPPLIER).get()
+            val hasExtensions = args.any { line ->
+                val matcher = tagPattern.matcher(line)
+                matcher.find() && matcher.group("name").let { name ->
+                    name !in tagBuilders && tagSupplier[name].orEmpty().any {
+                        it.isNotBlank() && !it.trimStart().startsWith("//")
+                    }
+                }
+            }
+            constants += shaderFeatures.withExtensions(hasExtensions).constants()
             val bytes = buildString {
                 args.forEach write@ { string ->
                     var s = string

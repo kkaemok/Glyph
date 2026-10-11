@@ -53,6 +53,7 @@ access and the relevant `glyph.*` subcommand permission; root access includes
 - [Migration from BetterHud](GLYPH_MIGRATION.md)
 - [Configuration extensions](GLYPH_CONFIGURATION.md)
 - [External bossbar font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md)
+- [26.3 shared text shader and Essential compatibility](GLYPH_SHADER_COMPATIBILITY.md)
 - [CraftEngine integration using BetterHud's original behavior](GLYPH_PACK_COMPATIBILITY.md)
 - [Async popup lifecycle and Typewriter investigation](GLYPH_POPUP_LIFECYCLE.md)
 - [Typewriter version comparison and reload recovery](GLYPH_TYPEWRITER_COMPARISON.md)

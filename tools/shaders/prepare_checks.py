@@ -4,20 +4,33 @@ Usage: python prepare_checks.py CLIENT_JAR OUTPUT_DIR [VERSION=26.3]
 No downloading or changing shader sources. Java driver needs matching LWJGL ShaderC jars/natives.
 """
 from pathlib import Path
+import argparse
 import re
-import sys
 import zipfile
 
-client = zipfile.ZipFile(sys.argv[1])
-output = Path(sys.argv[2])
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("client_jar")
+parser.add_argument("output_dir")
+parser.add_argument("version", nargs="?", default="26.3")
+parser.add_argument("--profile", choices=("ordinary", "wave", "rainbow", "tiny_rainbow", "all", "static_scale", "extensions"), default="all")
+parser.add_argument("--template-dir", type=Path, help="Optional templates for a regression negative control")
+args = parser.parse_args()
+client = zipfile.ZipFile(args.client_jar)
+output = Path(args.output_dir)
 output.mkdir(parents=True, exist_ok=True)
-version = sys.argv[3] if len(sys.argv) > 3 else "26.3"
+version = args.version
 root = Path(__file__).resolve().parents[2]
+pipeline_constants = {"OIT_WAVELET_RANK": 2, "OIT_COEFF_COUNT": 8, "OIT_COEFF_ATTACHMENT_COUNT": 2}
+properties, static_scale = {
+    "ordinary": (0, False), "wave": (1, False), "rainbow": (2, False), "tiny_rainbow": (4, False),
+    "all": (7, True), "static_scale": (0, True), "extensions": (7, True),
+}[args.profile]
 constants = "\n".join(f"#define {k} {v}" for k, v in {
     "SHADER_VERSION": 4 if version == "26.3" else 3, "HEIGHT_BIT": 13, "MAX_BIT": 10,
     "ADD_OFFSET": 4095, "DEFAULT_OFFSET": 10, "LAYOUT_COUNT": 1,
     # 26.3 RenderPipelines.OIT_SNIPPET / LevelRenderer (wavelet rank 2).
-    "OIT_WAVELET_RANK": 2, "OIT_COEFF_COUNT": 8, "OIT_COEFF_ATTACHMENT_COUNT": 2,
+    **pipeline_constants,
+    "GLYPH_SHADER_PROPERTIES": properties, "GLYPH_STATIC_SCALE": int(static_scale),
 }.items())
 
 def expand(text):
@@ -37,15 +50,29 @@ if version == "26.3":
         "oit_transmittance": ["OIT", "OIT_TRANSMITTANCE", "OIT_ALPHA_ONLY"]})
 for suffix in ("vsh", "fsh"):
     source_path = root / "common-resources" / (f"shader/26.3/text.{suffix}" if version == "26.3" else f"text.{suffix}")
+    if args.template_dir:
+        source_path = args.template_dir / f"text.{suffix}"
     for hide in (False, True):
         text = source_path.read_text(encoding="utf-8")
         if hide:
             text = text.replace("//HideExp", "")
-        text = text.replace("#CreateConstant", constants).replace("#CreateLayout", "case 1: break;")
+        layout = f"case 1: property = {properties};"
+        if static_scale:
+            layout += " pos.xy *= uiScreen;"
+        layout += " break;"
+        if args.profile == "extensions":
+            # Equivalent to an API tag supplier that requires the shared Globals environment.
+            layout = "case 1: break;"
+            text = text.replace("#GenerateOtherMainMethod", "vertexColor.x += GameTime;" if suffix == "vsh" else "")
+        text = text.replace("#CreateConstant", constants).replace("#CreateLayout", layout)
         text = re.sub(r"#Generate\w+", "", text)
         for name, defines in variants.items():
             expanded = expand(text)
             lines = expanded.splitlines()
-            lines[1:1] = [f"#define {define}" for define in defines]
+            # A compiled pack already contains Glyph's constants. Supply the
+            # defines that Minecraft's OIT pipeline contributes at draw time.
+            pipeline_defines = [f"#define {key} {value}" for key, value in pipeline_constants.items()
+                if not re.search(rf"^\s*#define\s+{key}\b", expanded, re.MULTILINE)]
+            lines[1:1] = [f"#define {define}" for define in defines] + pipeline_defines
             (output / f"{version}_{name}_{'hide_exp' if hide else 'normal'}.{suffix}").write_text("\n".join(lines), encoding="utf-8")
 print(f"Prepared {len(variants) * 4} shader inputs for {version}")
