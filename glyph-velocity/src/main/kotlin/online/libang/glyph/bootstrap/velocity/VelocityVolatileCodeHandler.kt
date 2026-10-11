@@ -10,21 +10,27 @@ import java.util.concurrent.ConcurrentHashMap
 
 class VelocityVolatileCodeHandler : VolatileCodeHandler {
     companion object {
-        private val bossBarMap = ConcurrentHashMap<UUID, VelocityBossBarTransport>()
+        private data class OwnedTransport(val owner: HudPlayer, val transport: VelocityBossBarTransport)
+        private val bossBarMap = ConcurrentHashMap<UUID, OwnedTransport>()
     }
 
     override fun inject(player: HudPlayer, color: BossBar.Color) {
         val h = player.handle() as ConnectedPlayer
         bossBarMap.computeIfAbsent(h.uniqueId) {
-            VelocityBossBarTransport(h, color)
+            OwnedTransport(player, VelocityBossBarTransport(h, color, player))
         }
     }
     override fun showBossBar(player: HudPlayer, color: BossBar.Color, component: Component) {
-        bossBarMap[player.uuid()]?.update(color, component)
+        bossBarMap[player.uuid()]?.takeIf { it.owner === player }?.transport?.update(color, component)
     }
 
     override fun removeBossBar(player: HudPlayer) {
-        bossBarMap.remove(player.uuid())?.close()
+        removeBossBar(player, true)
+    }
+
+    internal fun removeBossBar(player: HudPlayer, restoreExternal: Boolean) {
+        val entry = bossBarMap[player.uuid()] ?: return
+        if (entry.owner === player && bossBarMap.remove(player.uuid(), entry)) entry.transport.close(restoreExternal)
     }
 
     override fun getTextureValue(player: HudPlayer): String {

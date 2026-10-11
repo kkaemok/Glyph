@@ -56,6 +56,8 @@ object ConfigManagerImpl : GlyphManager, ConfigManager {
 
     var mergeBossBar = true
         private set
+    var velocityHudServers = emptySet<String>()
+        private set
     var packType = PackType.ZIP
         private set
     var enableSelfHost = false
@@ -172,6 +174,9 @@ object ConfigManagerImpl : GlyphManager, ConfigManager {
             versionCheck = yaml.getAsBoolean("version-check", false)
             enableProtection = yaml.getAsBoolean("enable-protection", false)
             mergeBossBar = yaml.getAsBoolean("merge-boss-bar", true)
+            velocityHudServers = yaml["velocity-hud-servers"]?.asArray()?.map {
+                it.asString()
+            }?.toSet() ?: emptySet()
             enableSelfHost = yaml.getAsBoolean("enable-self-host", false)
             mergeOtherFolders = yaml["merge-other-folders"]?.asArray()?.map {
                 it.asString()

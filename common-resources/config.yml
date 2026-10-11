@@ -11,6 +11,9 @@ default-font-name: "font.ttf"
 bossbar-line: 1
 bossbar-resource-pack-line: 0
 merge-boss-bar: true
+# Velocity only: opt in backend names for proxy HUDs. Paper HUDs need no entry.
+# Empty disables proxy HUDs; ["*"] explicitly enables them on every backend.
+velocity-hud-servers: []
 disable-to-bedrock-player: true
 build-folder-location: "Glyph/build"
 pack-type: zip #folder, zip, none

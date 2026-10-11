@@ -116,4 +116,78 @@ class ExternalPackRegistrationTest {
         assertTrue(Files.exists(glyph))
         assertTrue(Files.exists(external))
     }
+
+    @Test fun `manually configured build zip is replaced with one filtered Glyph pack`() {
+        val glyph = root.resolve("Glyph/build.zip"); val cnp = root.resolve("CNP.zip")
+        val ownFiles = BossBarPackFixtures.glyphFiles()
+        ZipPackOutput.write(CompiledPack.of(ownFiles), glyph)
+        ZipPackOutput.write(CompiledPack.of(mapOf(BossBarPackFixtures.BARS to BossBarPackFixtures.cnpBars(2))), cnp)
+        val folders = mutableSetOf<Path>(); val zips = mutableSetOf(glyph, cnp)
+        val resolved = root.resolve("Glyph/.cache/craftengine-registration.zip")
+        val registration = ExternalPackRegistration(resolved)
+        registration.register(glyph, zips, folders, zips, format)
+        assertEquals(setOf(cnp, resolved), zips)
+        // Exercise what CraftEngine actually receives: one shader, font and CNP atlas.
+        for (asset in listOf(BossBarPackFixtures.SHADER, BossBarPackFixtures.FONT, BossBarPackFixtures.BARS)) {
+            assertEquals(1, (folders + zips).count { asset in read(it) }, asset)
+        }
+        assertContentEquals(ownFiles.getValue(BossBarPackFixtures.SHADER), read(resolved)[BossBarPackFixtures.SHADER])
+        assertContentEquals(ownFiles.getValue(BossBarPackFixtures.BARS), read(glyph)[BossBarPackFixtures.BARS])
+    }
+
+    @Test fun `configured folder and normalized aliases are replaced in both cache sets`() {
+        val glyph = root.resolve("Glyph/build")
+        DirectoryPackOutput().write(CompiledPack.of(BossBarPackFixtures.glyphFiles()), glyph)
+        val cnp = root.resolve("CNP.zip")
+        ZipPackOutput.write(CompiledPack.of(mapOf(BossBarPackFixtures.BARS to BossBarPackFixtures.cnpBars(2))), cnp)
+        val alias = glyph.resolve("../build")
+        val folders = mutableSetOf(glyph, alias); val zips = mutableSetOf(alias, cnp)
+        val resolved = root.resolve("cache/resolved.zip")
+        ExternalPackRegistration(resolved).register(glyph, folders + zips, folders, zips, format)
+        assertTrue(folders.isEmpty())
+        assertEquals(setOf(cnp, resolved), zips)
+        assertTrue(Files.isDirectory(glyph))
+    }
+
+    @Test fun `restart ignores stale private copy and replaces configured original plus copy`() {
+        val glyph = root.resolve("Glyph.zip"); val cnp = root.resolve("CNP.zip")
+        val resolved = root.resolve("cache/resolved.zip")
+        ZipPackOutput.write(CompiledPack.of(BossBarPackFixtures.glyphFiles()), glyph)
+        ZipPackOutput.write(CompiledPack.of(mapOf(BossBarPackFixtures.BARS to BossBarPackFixtures.cnpBars(2))), cnp)
+        val folders = mutableSetOf<Path>(); val zips = mutableSetOf(glyph, cnp)
+        ExternalPackRegistration(resolved).register(glyph, zips, folders, zips, format)
+        val updated = BossBarPackFixtures.glyphFiles() + (BossBarPackFixtures.SHADER to "updated shader".toByteArray())
+        ZipPackOutput.write(CompiledPack.of(updated), glyph)
+        zips.add(glyph)
+        // New instance simulates a restart where registeredOutput has not been set.
+        ExternalPackRegistration(resolved).register(glyph, zips, folders, zips, format)
+        assertEquals(setOf(cnp, resolved), zips)
+        assertContentEquals("updated shader".toByteArray(), read(resolved)[BossBarPackFixtures.SHADER])
+    }
+
+    @Test fun `fresh critical conflict removes manually configured original and stale private copy`() {
+        val glyph = root.resolve("Glyph.zip"); val cnp = root.resolve("CNP.zip")
+        val resolved = root.resolve("cache/resolved.zip")
+        ZipPackOutput.write(CompiledPack.of(BossBarPackFixtures.glyphFiles()), glyph)
+        ZipPackOutput.write(CompiledPack.of(BossBarPackFixtures.glyphFiles()), resolved)
+        ZipPackOutput.write(CompiledPack.of(mapOf("pack.mcmeta" to BossBarPackFixtures.metadata,
+            BossBarPackFixtures.SHADER to "incompatible shader".toByteArray())), cnp)
+        val folders = mutableSetOf<Path>(); val zips = mutableSetOf(glyph, cnp, resolved)
+        val registration = ExternalPackRegistration(resolved)
+        assertFailsWith<IllegalArgumentException> { registration.register(glyph, zips, folders, zips, format) }
+        assertEquals(setOf(cnp), zips)
+        assertNull(registration.registeredOutput)
+        assertTrue(Files.exists(glyph))
+        assertTrue(Files.exists(resolved))
+    }
+
+    @Test fun `other pack with Glyph namespace is retained rather than removed by asset matching`() {
+        val glyph = root.resolve("Glyph.zip"); val other = root.resolve("other.zip")
+        ZipPackOutput.write(CompiledPack.of(BossBarPackFixtures.glyphFiles()), glyph)
+        ZipPackOutput.write(CompiledPack.of(mapOf(BossBarPackFixtures.FONT to
+            BossBarPackFixtures.glyphFiles().getValue(BossBarPackFixtures.FONT))), other)
+        val folders = mutableSetOf<Path>(); val zips = mutableSetOf(glyph, other)
+        ExternalPackRegistration(root.resolve("cache/resolved.zip")).register(glyph, zips, folders, zips, format)
+        assertEquals(setOf(glyph, other), zips)
+    }
 }

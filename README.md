@@ -10,6 +10,10 @@ Open this directory as a Gradle project in IntelliJ IDEA and select a Java 25 Gr
 
 Paper and Velocity distributions are written to `build/libs` (`Glyph-paper` and `Glyph-velocity`). `pluginJar` and `velocityJar` build individual distributions. `test build` runs the full regression suite and builds both distributions; `:glyph-core:test` runs portable logic tests. First-time NMS setup downloads matching Paper development bundles and can take time.
 
+Velocity HUD rendering is opt-in through `velocity-hud-servers` (empty by default).
+Paper HUDs work independently. List backend names only when the proxy should own
+their HUD; see [Velocity ownership settings](GLYPH_CONFIGURATION.md#velocity-hud-ownership).
+
 Fabric and Minecraft 1.21 implementations are intentionally removed. Private libraries are bundled at build time. Glyph does not inject URLs into server classloaders, publish to BetterHud registries or report to BetterHud metrics IDs.
 
 ## Native state

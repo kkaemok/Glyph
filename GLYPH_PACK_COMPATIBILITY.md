@@ -106,3 +106,43 @@ session was not available.
 | --- | ---: | --- |
 | `Glyph-paper-0.1.0-SNAPSHOT.jar` | 35,374,898 | `17EEF4E29309B2C2BA5E93C621D36BB8E1D21E0BF2AA15B6E89C8F77023F5C5B` |
 | `Glyph-velocity-0.1.0-SNAPSHOT.jar` | 35,143,703 | `0596FFB0087CC336F3B9E653AFC182F5AF7FF8E0DEDFAB8FBFB4B1E733D22217` |
+
+## Duplicate Glyph registration follow-up (2026-10-11)
+
+The supplied CraftEngine log lists both `plugins/Glyph/build.zip` and
+`plugins/Glyph/.cache/craftengine-registration.zip` for the same Glyph assets.
+The previous helper excluded the original ZIP when inspecting external owners,
+but did not remove a manually configured original ZIP from CraftEngine's actual
+input sets when registering the filtered copy. This produced duplicate warnings
+for Glyph's own fonts and textures.
+
+Registration now replaces all references to the current original output, prior
+registered output and dedicated private copy in CraftEngine's external ZIP/folder
+sets, comparing normalized/canonical paths. Only the selected Glyph output is
+then added. A new plugin instance also ignores its stale private copy during
+inspection. Genuine conflicts remove these owned inputs so a manually configured
+original cannot bypass strict validation. Other packs remain registered, including
+packs which happen to use Glyph's namespace. No source ZIP or CNP file is changed.
+
+Five additional registration regressions cover preconfigured ZIPs, folder/alias
+inputs, restarts with stale copies, fresh critical-conflict cleanup and retention
+of other packs. They inspect the assets CraftEngine actually receives and verify
+that Glyph's shader/font and the external CNP atlas each have one effective input.
+
+Ten `ServerHudScopeTest` regressions cover the separate Velocity ownership fix:
+empty defaults, connection timing, repeated events, enabled/disabled backend
+transitions, state reset between enabled backends, current-bar restoration on
+configuration changes, disconnects, reloads, wildcard opt-in, failed creation and
+delayed asynchronous connection events. See
+[Velocity settings](GLYPH_CONFIGURATION.md#velocity-hud-ownership).
+
+The final `gradlew.bat test build :glyph-paper-api:writeCompatibilityClasspath`
+run succeeded: 98 tests, zero failures/errors/skips. Both JARs passed ZIP CRC,
+metadata, licensing, relocation, Java 25 and shader-resource checks, and contain
+the new empty Velocity scope default. Live CraftEngine/Velocity server testing
+was not available on this computer.
+
+| Updated distribution | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `Glyph-paper-0.1.0-SNAPSHOT.jar` | 35,379,645 | `1AAB278B745C3C5DF3E6939E024CFB9711924C290C24702E86CF53F53B3D3792` |
+| `Glyph-velocity-0.1.0-SNAPSHOT.jar` | 35,154,275 | `A0EB6EC3B7EE9A64AD5AFBB20ABEEF92B05BEDE74A5537BF13B75214ED34FF5D` |

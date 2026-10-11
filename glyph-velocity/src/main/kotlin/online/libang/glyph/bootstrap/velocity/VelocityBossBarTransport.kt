@@ -8,6 +8,7 @@ import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
 import online.libang.glyph.api.GlyphAPI
+import kr.toxicity.hud.api.player.HudPlayer
 import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.transport.BossBarStateTracker
 import online.libang.glyph.transport.BossBarSlotPlan
@@ -15,9 +16,10 @@ import online.libang.glyph.transport.ExternalBossBarText
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
 
 /** Connection-owned state; updates preserve fields omitted from partial Velocity packets. */
-internal class VelocityBossBarTransport(private val player: ConnectedPlayer, color: BossBar.Color) {
+internal class VelocityBossBarTransport(private val player: ConnectedPlayer, color: BossBar.Color, private val hudPlayer: HudPlayer) {
     private val connection = player.connection
     private val channel = connection.channel
     private val hudId = UUID.randomUUID()
@@ -32,6 +34,7 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
     private var mergeMode = GlyphAPI.inst().isMergeBossBar
     private var hud = State(color = color)
     private var closed = false
+    private val closing = AtomicBoolean()
     private var bypass = false
     private val pipelineName = "glyph_bossbar"
 
@@ -43,6 +46,7 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
 
     init {
         channel.eventLoop().execute {
+            if (closing.get()) return@execute
             val pipeline = channel.pipeline()
             val key = pipeline.names().firstOrNull { pipeline[it] is MinecraftConnection }
                 ?: error("Cannot find Velocity connection handler for Glyph")
@@ -58,7 +62,7 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
     }
     fun update(color: BossBar.Color, component: Component) {
         channel.eventLoop().execute {
-            if (closed) return@execute
+            if (closing.get()) return@execute
             syncMergeMode()
             if (refreshAdditional) reconcile()
             val lines = (ConfigManagerImpl.bossbarLine - 1).coerceAtLeast(0)
@@ -74,15 +78,18 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
                 forceName = ConfigManagerImpl.forceUpdate)
         }
     }
-    fun close() {
+    fun close(restoreExternal: Boolean = true) {
+        if (!closing.compareAndSet(false, true)) return
         channel.eventLoop().execute {
             if (closed) return@execute
             closed = true
-            for ((id, state) in tracker.entries()) if (assignments[id] != id) publish(id, state, true)
+            if (restoreExternal) {
+                for ((id, state) in tracker.entries()) if (assignments[id] != id) publish(id, state, true)
+            }
             owned.forEach(::remove)
             if (channel.pipeline()[pipelineName] != null) channel.pipeline().remove(pipelineName)
             tracker.clear(); sent.clear()
-            GlyphAPI.inst().playerManager.getHudPlayer(player.uniqueId)?.additionalComponent = null
+            hudPlayer.additionalComponent = null
         }
     }
     private fun send(packet: BossBarPacket) {
@@ -109,7 +116,7 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
         if (packet.flags.toInt() and 4 != 0) add(BossBar.Flag.CREATE_WORLD_FOG)
     }
     private fun intercept(packet: BossBarPacket): Boolean {
-        if (closed || bypass || packet.uuid in owned) return false
+        if (closed || closing.get() || bypass || packet.uuid in owned) return false
         syncMergeMode()
         if (!mergeMode) return false
         val id = packet.uuid
@@ -156,8 +163,7 @@ internal class VelocityBossBarTransport(private val player: ConnectedPlayer, col
         val chosen = plan.merged?.let { id -> states.first { it.first == id } }
         if (!GlyphAPI.inst().isOnReload && (refreshAdditional || chosen?.first != selected || chosen?.second?.name != selectedName)) {
             selected = chosen?.first; selectedName = chosen?.second?.name
-            val hudPlayer = GlyphAPI.inst().playerManager.getHudPlayer(player.uniqueId)
-            hudPlayer?.additionalComponent = chosen?.second?.name?.let { ExternalBossBarText.measure(it) }
+            hudPlayer.additionalComponent = chosen?.second?.name?.let { ExternalBossBarText.measure(it) }
         }
         refreshAdditional = GlyphAPI.inst().isOnReload
         if (chosen == null) publish(hudId, hud)

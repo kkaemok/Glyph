@@ -4,7 +4,8 @@ import com.google.inject.Inject
 import com.velocitypowered.api.command.BrigadierCommand
 import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.event.Subscribe
-import com.velocitypowered.api.event.connection.PostLoginEvent
+import com.velocitypowered.api.event.connection.DisconnectEvent
+import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
@@ -33,6 +34,8 @@ import online.libang.glyph.manager.ConfigManagerImpl
 import online.libang.glyph.manager.DatabaseManagerImpl
 import online.libang.glyph.manager.PlayerManagerImpl
 import online.libang.glyph.pack.PackUploader
+import online.libang.glyph.transport.ServerHudScope
+import kr.toxicity.hud.api.plugin.ReloadState
 import online.libang.glyph.util.*
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -43,6 +46,7 @@ import java.io.File
 import java.io.InputStream
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import java.util.UUID
 
 @Suppress("UNUSED")
 @Plugin(
@@ -120,6 +124,34 @@ class VelocityBootstrapImpl @Inject constructor(
     private val core = GlyphImpl(this).apply {
         GlyphAPI.inst(this)
     }
+    @Volatile private var ready = false
+    private val hudScope = ServerHudScope<UUID>(
+        { id -> proxyServer.getPlayer(id).ifPresent(::register) },
+        { id, restore ->
+            PlayerManagerImpl.removeHudPlayer(id)?.let { player ->
+                volatileCode.removeBossBar(player, restore)
+                player.cancel()
+                // Finish persistence before a replacement loads it, or shutdown
+                // closes the database and cancels proxy scheduler work.
+                runCatching { player.save() }.handleFailure { "Unable to save ${player.name()}'s proxy HUD." }
+            }
+        }
+    )
+
+    private fun serverName(player: Player): String? = if (player.isActive)
+        player.currentServer.orElse(null)?.serverInfo?.name else null
+
+    private fun reconcile(player: Player) {
+        hudScope.reconcile(player.uniqueId, { serverName(player) },
+            { if (ready) ConfigManagerImpl.velocityHudServers else emptySet() })
+    }
+
+    private fun ownsHud(player: HudPlayer): Boolean {
+        val handle = player.handle() as Player
+        val server = serverName(handle)
+        return ready && (server in ConfigManagerImpl.velocityHudServers || "*" in ConfigManagerImpl.velocityHudServers) &&
+            hudScope.contains(handle.uniqueId, server) && PlayerManagerImpl.getHudPlayer(handle.uniqueId) === player
+    }
 
     override fun scheduler(): HudScheduler = scheduler
     override fun jarFile(): File = File(javaClass.getProtectionDomain().codeSource.location.toURI())
@@ -134,8 +166,13 @@ class VelocityBootstrapImpl @Inject constructor(
     @Subscribe
     fun enable(e: ProxyInitializeEvent) {
         latest = handleLatestVersion()
-        proxyServer.allPlayers.forEach {
-            register(it)
+        core.addReloadStartTask {
+            ready = false
+            hudScope.clear(true)
+        }
+        core.addReloadEndTask { result ->
+            ready = result is ReloadState.Success
+            proxyServer.allPlayers.forEach(::reconcile)
         }
         ModuleManager.start()
         registerCommand()
@@ -152,26 +189,32 @@ class VelocityBootstrapImpl @Inject constructor(
 
     @Subscribe
     fun disable(e: ProxyShutdownEvent) {
+        ready = false
+        hudScope.clear(true)
         core.end()
         metrics?.shutdown()
         log.info("Plugin disabled.")
     }
 
     @Subscribe
-    fun login(e: PostLoginEvent) {
-        register(e.player)
+    fun connected(e: ServerPostConnectEvent) {
+        reconcile(e.player)
+    }
+
+    @Subscribe
+    fun disconnected(e: DisconnectEvent) {
+        hudScope.disconnect(e.player.uniqueId)
     }
 
     private fun register(player: Player) {
         val audience = PlayerManagerImpl.addHudPlayer(player.uniqueId) {
-            val impl = HudPlayerVelocity(player)
-            asyncTask {
-                DatabaseManagerImpl.currentDatabase.load(impl)
-                task {
-                    sendResourcePack(impl)
-                }
+            HudPlayerVelocity(player)
+        }
+        asyncTask {
+            if (ownsHud(audience)) {
+                DatabaseManagerImpl.currentDatabase.load(audience)
+                task { sendResourcePack(audience) }
             }
-            impl
         }
         if (player.hasPermission(VERSION_CHECK_PERMISSION) && ConfigManagerImpl.versionCheck) latest.forEach(audience::info)
     }
@@ -189,6 +232,7 @@ class VelocityBootstrapImpl @Inject constructor(
     }
 
     override fun sendResourcePack(player: HudPlayer) {
+        if (!ownsHud(player)) return
         PackUploader.server?.let {
             (player.handle() as Player).sendResourcePackOffer(proxyServer.createResourcePackBuilder(it.url)
                 .setHash(it.digest)
@@ -204,8 +248,8 @@ class VelocityBootstrapImpl @Inject constructor(
                 .setId(online.libang.glyph.pack.PackUUID.requestIdentity)
                 .setShouldForce(false)
                 .build()
-            proxyServer.allPlayers.forEach { p ->
-                p.sendResourcePackOffer(info)
+            PlayerManagerImpl.allHudPlayer.forEach { player ->
+                if (ownsHud(player)) (player.handle() as Player).sendResourcePackOffer(info)
             }
         }
     }

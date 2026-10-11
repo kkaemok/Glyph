@@ -147,7 +147,36 @@ client-centered standalone slots as described in [the font audit](GLYPH_EXTERNAL
 Core shader overrides remain
 version-sensitive even after offline compilation succeeds.
 
+Glyph replaces any manually configured reference to its own build output in
+CraftEngine's external input sets when it registers the filtered copy. Do not add
+the private `.cache/craftengine-registration.zip` to CraftEngine's configuration;
+Glyph manages this entry. Normalized aliases and stale copies from a prior plugin
+instance are also removed from those sets. The source ZIP and CNP pack are untouched.
+
 `assets/minecraft/post_effect/end_of_frame.json` has one effective owner at each
 pack priority. Conflicting definitions fail validation. Glyph does not concatenate
 arbitrary post-effect graphs. Player post-effect keys use Paper's 26.3 API on the
 player's owning thread and require matching client pack assets.
+
+## Velocity HUD ownership
+
+`velocity-hud-servers: []` disables proxy HUDs by default, including existing
+configurations which previously omitted this key. Paper Glyph renders its own
+HUD independently, so a network using Paper HUDs can keep the proxy list empty.
+Velocity cannot infer which backend has Glyph from its server registry.
+
+For intentional proxy HUDs, list exact backend names from `velocity.toml`:
+
+```yaml
+velocity-hud-servers: [lobby, survival]
+```
+
+Use `["*"]` only to explicitly opt in every backend. This controls proxy HUDs,
+bossbar interception and Glyph resource-pack offers, not other plugins' bars.
+Rendering starts after the backend connection and successful Glyph reload.
+Leaving a listed backend cancels the player tasks, removes proxy-owned bars and
+detaches interception. Switching between listed backends recreates the transport
+without carrying over old bossbars. Old-backend bars are not restored on switches
+or disconnects; current-backend bars are restored when disabling proxy rendering
+through a reload. Avoid enabling proxy HUDs on a backend already rendering the
+same HUD with Paper Glyph.
