@@ -49,6 +49,7 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 - [Configuration extensions](GLYPH_CONFIGURATION.md)
 - [External bossbar font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md)
 - [CraftEngine texture ownership and strict pack conflicts](GLYPH_PACK_COMPATIBILITY.md)
+- [Async popup lifecycle and Typewriter investigation](GLYPH_POPUP_LIFECYCLE.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution

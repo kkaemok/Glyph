@@ -153,9 +153,6 @@ class PopupImpl(
     }
     private fun show0(reason: UpdateEvent, player: HudPlayer): PopupUpdater? {
         val key = reason.key
-        val get = player.popupGroupIteratorMap.computeIfAbsent(group) {
-            PopupIteratorGroupImpl()
-        }
         val buildCondition = conditions build reason
         if (!buildCondition(player)) return null
         var updater = {
@@ -197,7 +194,9 @@ class PopupImpl(
             cond,
             remove0
         )
-        get.addIterator(iterator)
+        // Build the iterator before publishing its group. Rendering and publication
+        // must agree atomically on whether the group is still attached to the player.
+        PopupGroupLifecycle.add(player.popupGroupIteratorMap, group, iterator)
         return object : PopupUpdater {
             override fun update(): Boolean {
                 if (iterator.markedAsRemoval()) return false
@@ -206,7 +205,6 @@ class PopupImpl(
             }
             override fun remove() {
                 iterator.remove()
-                if (get.index == 0) player.popupGroupIteratorMap.remove(group)
             }
             override fun getIndex(): Int = iterator.index
             override fun setIndex(index: Int) {

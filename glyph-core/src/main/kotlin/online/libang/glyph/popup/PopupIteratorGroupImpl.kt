@@ -11,14 +11,17 @@ class PopupIteratorGroupImpl : PopupIteratorGroup {
 
     override fun addIterator(iterator: PopupIterator) {
         synchronized(sourceSet) {
-            if (iterator.isUnique && contains(iterator.name())) return
             val map = HashSet<Int>()
             val loop = sourceSet.iterator()
             while (loop.hasNext()) {
                 val next = loop.next()
-                if (next.markedAsRemoval()) next.remove()
+                // Release removed slots before checking uniqueness or inserting a
+                // replacement. TreeSet compares indices and would reject the new
+                // iterator if the old entry still occupied the same index.
+                if (next.markedAsRemoval()) loop.remove()
                 else map += next.index
             }
+            if (iterator.isUnique && contains(iterator.name())) return
             val i = if (iterator.index < 0) when (iterator.sortType) {
                 PopupSortType.FIRST -> 0
                 PopupSortType.LAST -> run {

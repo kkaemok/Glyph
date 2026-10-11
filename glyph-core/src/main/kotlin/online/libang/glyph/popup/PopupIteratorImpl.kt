@@ -31,7 +31,7 @@ class PopupIteratorImpl(
 ) : PopupIterator {
     private var tick = 0L
     private var i = -1
-    private var removal = false
+    @Volatile private var removal = false
     private val id = UUID.randomUUID()
 
     private val valueMap = run {

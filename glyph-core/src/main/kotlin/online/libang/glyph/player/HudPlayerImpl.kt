@@ -11,6 +11,7 @@ import kr.toxicity.hud.api.player.PointedLocation
 import kr.toxicity.hud.api.popup.PopupIteratorGroup
 import kr.toxicity.hud.api.popup.PopupUpdater
 import online.libang.glyph.manager.*
+import online.libang.glyph.popup.PopupGroupLifecycle
 import online.libang.glyph.util.*
 import net.kyori.adventure.bossbar.BossBar
 import java.util.concurrent.ConcurrentHashMap
@@ -131,18 +132,7 @@ abstract class HudPlayerImpl : HudPlayer {
                     "Unable to update ${k}."
                 }.getOrDefault(true)
             }
-            val popupGroupIterator = popupGroup.values.iterator()
-            while (popupGroupIterator.hasNext()) {
-                val next = popupGroupIterator.next()
-                if (next.index == 0) {
-                    popupGroupIterator.remove()
-                    continue
-                }
-                val comp = next.next()
-                if (comp.isEmpty()) {
-                    popupGroupIterator.remove()
-                } else compList += comp
-            }
+            compList += PopupGroupLifecycle.render(popupGroup)
         }
         val component = if (compList.isNotEmpty() || additionalComp != null) {
             additionalComp?.let {
