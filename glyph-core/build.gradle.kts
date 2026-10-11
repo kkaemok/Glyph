@@ -11,13 +11,6 @@ dependencies {
     testImplementation(libs.bundles.library)
 }
 
-tasks.processTestResources {
-    from(rootProject.file("common-resources")) {
-        include("bars.png", "background.png")
-        into("bossbar-fixtures")
-    }
-}
-
 tasks.register<JavaExec>("profileCore") {
     group = "verification"
     description = "Profile state, dependency cache and send decisions without Minecraft."

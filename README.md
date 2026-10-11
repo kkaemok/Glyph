@@ -48,8 +48,9 @@ edges. See [configuration examples](GLYPH_CONFIGURATION.md).
 - [Migration from BetterHud](GLYPH_MIGRATION.md)
 - [Configuration extensions](GLYPH_CONFIGURATION.md)
 - [External bossbar font and centering audit](GLYPH_EXTERNAL_BOSSBARS.md)
-- [CraftEngine texture ownership and strict pack conflicts](GLYPH_PACK_COMPATIBILITY.md)
+- [CraftEngine integration using BetterHud's original behavior](GLYPH_PACK_COMPATIBILITY.md)
 - [Async popup lifecycle and Typewriter investigation](GLYPH_POPUP_LIFECYCLE.md)
+- [Typewriter version comparison and reload recovery](GLYPH_TYPEWRITER_COMPARISON.md)
 - [Original requirements](GLYPH_REQUIREMENTS.md)
 
 ## Attribution

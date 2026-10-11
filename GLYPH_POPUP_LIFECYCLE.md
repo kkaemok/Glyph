@@ -54,11 +54,13 @@ The installed BetterHud extension's popup helper passes a `CustomPopupEvent`
 through `BukkitEventUpdateEvent` directly to `Popup.show()`, and supplies both
 `typewriter_text` and its newer `text` alias. The client's downloaded CraftEngine
 pack contains the dialogue image/font resources. Neither finding establishes a
-live render result; these are confirmed code defects and plausible
-causes of the reported silent Typewriter failure. Retesting the rebuilt JAR on
-the user's server is still required.
+live render result. These are confirmed code defects, but both also existed in
+the earlier working API-support source. Subsequently the user confirmed that
+`ce reload all` restored dialogues, animations and external bossbar text with
+the existing JAR. That recovery does not establish that these lifecycle defects
+caused the reported regression; see [the version comparison](GLYPH_TYPEWRITER_COMPARISON.md).
 
-## Build result (2026-10-11)
+## Build result before the CraftEngine rollback (2026-10-11, ebe5266f)
 
 `gradlew.bat test build :glyph-paper-api:writeCompatibilityClasspath` succeeded.
 The final reports contain 106 tests with zero failures, errors or skips,

@@ -29,6 +29,6 @@ Java API classes remain available on Velocity.
 Glyph resource requests use a stable pack ID and retain unrelated packs. On the
 first migration, remove the old BetterHud pack or reconnect/reapply the server's
 complete pack set. Shared core shaders and `end_of_frame` need one explicit owner.
-CraftEngine's integration rejects conflicting effective resources rather than
-silently overriding its declared assets. See GLYPH_CONFIGURATION.md for the new
+CraftEngine's integration follows BetterHud's direct build-output registration;
+CraftEngine handles external resource merging. See GLYPH_CONFIGURATION.md for the new
 flow, directory-image and nine-slice syntax.

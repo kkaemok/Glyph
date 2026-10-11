@@ -127,18 +127,11 @@ different content at the same effective path explicitly.
 
 For CraftEngine ownership, enable the existing `merge-with-external-resources`
 option and let CraftEngine distribute the final pack. Disable Glyph self-hosting
-when CraftEngine owns distribution. The async cache event validates Glyph against
-declared CraftEngine resource folders and registered external packs, including
-active overlays. Later-generated CraftEngine assets still require final-pack QA.
-
-Ordinary PNG collisions are handled separately: equivalent decoded pixels can
-coexist, including the transparent bossbar sprites used by Glyph and CNP. For a
-different ordinary texture with one external owner, Glyph registers a copy at
-`plugins/Glyph/.cache/craftengine-registration.zip` without its duplicate texture
-or animation metadata. The external pack supplies that texture; Glyph's original
-output remains unchanged. Glyph logs the selected owner. Different core shaders,
-font definitions/bitmap dependencies, post effects and incompatible overlays
-still block registration. See [the collision audit](GLYPH_PACK_COMPATIBILITY.md).
+when CraftEngine owns distribution. As in BetterHud, the async cache event reloads
+Glyph and adds the returned build ZIP or directory directly to CraftEngine's
+external input set. CraftEngine owns the combined pack's merge behavior and
+collision diagnostics. Glyph performs no cross-pack inspection, texture-owner
+selection or input filtering. See [CraftEngine integration](GLYPH_PACK_COMPATIBILITY.md).
 
 CustomNameplates and TAB retain their own namespaces/fonts. Test their bitmap
 fonts and offsets with Glyph using the matrix in GLYPH_PERFORMANCE.md. External
@@ -147,14 +140,12 @@ client-centered standalone slots as described in [the font audit](GLYPH_EXTERNAL
 Core shader overrides remain
 version-sensitive even after offline compilation succeeds.
 
-Glyph replaces any manually configured reference to its own build output in
-CraftEngine's external input sets when it registers the filtered copy. Do not add
-the private `.cache/craftengine-registration.zip` to CraftEngine's configuration;
-Glyph manages this entry. Normalized aliases and stale copies from a prior plugin
-instance are also removed from those sets. The source ZIP and CNP pack are untouched.
+The previous private `.cache/craftengine-registration.zip` is no longer used.
+If it was manually configured in CraftEngine, remove that entry and use Glyph's
+build output. Restart the server and regenerate the combined pack after updating.
 
 `assets/minecraft/post_effect/end_of_frame.json` has one effective owner at each
-pack priority. Conflicting definitions fail validation. Glyph does not concatenate
+pack priority. CraftEngine controls external merge conflicts. Glyph does not concatenate
 arbitrary post-effect graphs. Player post-effect keys use Paper's 26.3 API on the
 player's owning thread and require matching client pack assets.
 
